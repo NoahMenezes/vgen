@@ -70,9 +70,6 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
       
       {/* SECTION 1: Minimal Centered Landing */}
       <section className={`${styles.section} ${styles.landingSection}`}>
-        <div className={styles.horizLine} />
-        <div className={styles.vertLine} />
-
         <div className={styles.centerBlock}>
           <h1 className={styles.title}>Vgen</h1>
           <p className={styles.subtitle}>Web · App · AI Agent Services</p>

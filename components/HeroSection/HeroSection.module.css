@@ -28,27 +28,6 @@
   background-color: #0a0a0a;
 }
 
-/* Thin Grid Lines (Crosshair) */
-.horizLine {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 50%;
-  height: 1px;
-  background-color: #1f1f23;
-  z-index: 1;
-}
-
-.vertLine {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 1px;
-  background-color: #1f1f23;
-  z-index: 1;
-}
-
 /* Center Text Container with Dark Mask */
 .centerBlock {
   position: relative;

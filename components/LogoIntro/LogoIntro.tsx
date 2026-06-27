@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import styles from "./LogoIntro.module.css";
 import HeroSection from "../HeroSection/HeroSection";
 
@@ -119,9 +120,9 @@ export default function LogoIntro() {
           <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             Work
           </span>
-          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
+          <Link href="/about" className={styles.menuLink}>
             OurStory
-          </span>
+          </Link>
           <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             Contact
           </span>
