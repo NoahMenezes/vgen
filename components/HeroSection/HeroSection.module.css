@@ -25,14 +25,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #0a0a0a;
+  background-color: #ffffff;
 }
 
-/* Center Text Container with Dark Mask */
+/* Center Text Container */
 .centerBlock {
   position: relative;
   z-index: 2;
-  background-color: #0a0a0a;
+  background-color: #ffffff;
   padding: 32px 48px;
   text-align: center;
   display: flex;
@@ -47,7 +47,7 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.3em;
-  color: #ffffff;
+  color: #0a0a0a;
   margin: 0;
   padding-left: 0.3em;
 }
@@ -58,7 +58,7 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: #a1a1aa;
+  color: #71717a;
   margin: 0;
   padding-left: 0.25em;
 }
@@ -69,7 +69,7 @@
   height: 300vh; /* scroll length for 3 slides */
   width: 100%;
   box-sizing: border-box;
-  background-color: #0a0a0a;
+  background-color: #ffffff;
 }
 
 /* Invisible Vertical snap targets inside track */
@@ -108,12 +108,12 @@
   flex-shrink: 0;
 }
 
-/* Media Card (White Empty Video Section) */
+/* Media Card (Dark Empty Video Section) */
 .mediaCard {
   width: calc(100% - 20px);
   height: calc(100vh - 80px);
   border-radius: 24px;
-  background-color: #ffffff;
+  background-color: #000000;
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
@@ -121,8 +121,8 @@
 
 /* SECTION 3: Overview Section */
 .overviewSection {
-  background-color: #0a0a0a;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #0a0a0a;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -158,7 +158,7 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #ffffff;
+  color: #0a0a0a;
   margin: 0;
 }
 
@@ -173,7 +173,7 @@
   font-size: clamp(20px, 3vw, 36px);
   font-weight: 300;
   line-height: 1.4;
-  color: #ffffff;
+  color: #0a0a0a;
   margin: 0;
 }
 
@@ -182,7 +182,7 @@
   font-size: clamp(13px, 1.4vw, 15px);
   font-weight: 300;
   line-height: 1.6;
-  color: #a1a1aa;
+  color: #52525b;
   max-width: 760px;
   margin: 0;
 }
@@ -203,6 +203,7 @@
 }
 
 .serviceCell {
+  background-color: #0c0c0e;
   border: 1px solid #27272a;
   border-radius: 12px;
   padding: 24px;
@@ -212,7 +213,7 @@
   color: #e4e4e7;
   display: flex;
   align-items: center;
-  transition: border-color 0.3s ease, color 0.3s ease;
+  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
 }
 
 .serviceCell:hover {

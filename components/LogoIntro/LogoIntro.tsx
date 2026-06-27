@@ -55,12 +55,12 @@ export default function LogoIntro() {
 
 
   if (!hasMounted) {
-    return <div className="min-h-screen bg-black" />;
+    return <div className="min-h-screen bg-white" />;
   }
 
   return (
     <div 
-      className={`bg-[#0a0a0a] min-h-screen relative select-none ${isAtLeft ? "overflow-visible" : "overflow-hidden"}`}
+      className={`bg-white min-h-screen relative select-none ${isAtLeft ? "overflow-visible" : "overflow-hidden"}`}
     >
       
       {/* Black Curtain Section (in front initially) */}
@@ -116,18 +116,9 @@ export default function LogoIntro() {
           <span onClick={handleHomeClick} className={styles.menuLink}>
             Home
           </span>
-          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
-            Services
-          </span>
-          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
-            Work
-          </span>
           <Link href="/about" className={styles.menuLink}>
             About
           </Link>
-          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
-            Contact
-          </span>
         </div>
 
         {/* Footer inside overlay */}

@@ -1,7 +1,7 @@
 .aboutWrapper {
   width: 100%;
-  background-color: #0a0a0a;
-  color: #ffffff;
+  background-color: #ffffff;
+  color: #0a0a0a;
   box-sizing: border-box;
   padding: 120px var(--logo-offset) 80px;
 }
@@ -11,7 +11,7 @@
   font-size: clamp(28px, 5vw, 56px);
   font-weight: 300;
   line-height: 1.25;
-  color: #ffffff;
+  color: #0a0a0a;
   max-width: 1000px;
   margin: 0 0 80px 0;
 }
@@ -74,7 +74,7 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #ffffff;
+  color: #0a0a0a;
   margin: 0;
 }
 
@@ -83,7 +83,7 @@
   font-size: clamp(20px, 3vw, 36px);
   font-weight: 300;
   line-height: 1.4;
-  color: #ffffff;
+  color: #0a0a0a;
   margin: 0;
 }
 
@@ -101,7 +101,7 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: #a1a1aa;
+  color: #52525b;
   margin-bottom: 40px;
 }
 

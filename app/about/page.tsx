@@ -15,7 +15,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main className="bg-[#0a0a0a] min-h-screen relative select-none">
+    <main className="bg-white min-h-screen relative select-none">
       
       {/* Vgen Logo link in top-left (stays static, no entry animation on this subpage) */}
       <Link href="/">
@@ -57,18 +57,9 @@ export default function AboutPage() {
           <Link href="/" className={styles.menuLink}>
             Home
           </Link>
-          <Link href="/" className={styles.menuLink}>
-            Services
-          </Link>
-          <Link href="/" className={styles.menuLink}>
-            Work
-          </Link>
           <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             About
           </span>
-          <Link href="/" className={styles.menuLink}>
-            Contact
-          </Link>
         </div>
 
         {/* Footer inside overlay */}

@@ -7,8 +7,8 @@ html {
 }
 
 :root {
-  --background: #000000;
-  --foreground: #ffffff;
+  --background: #ffffff;
+  --foreground: #0a0a0a;
   --logo-offset: clamp(20px, 4vw, 40px);
   --logo-size: clamp(24px, 2.5vw, 30px);
 }
@@ -22,8 +22,8 @@ html {
 }
 
 body {
-  background: #0a0a0a;
-  color: #ffffff;
+  background: #ffffff;
+  color: #0a0a0a;
   font-family: var(--font-geist-sans), Arial, sans-serif;
   overflow: hidden;
 }
@@ -33,12 +33,12 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #ffffff;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #d4d4d8;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: #a1a1aa;
 }
