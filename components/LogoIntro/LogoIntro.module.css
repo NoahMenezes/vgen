@@ -1,6 +1,7 @@
 .logoTransition {
   position: fixed;
-  z-index: 20;
+  z-index: 60;
+  mix-blend-mode: difference;
   transition: transform 1.8s cubic-bezier(0.16, 1, 0.3, 1),
               color 1.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -29,7 +30,7 @@
 /* Custom Hamburger Menu Button */
 .burgerButton {
   position: fixed;
-  z-index: 20;
+  z-index: 60;
   background: none;
   border: none;
   cursor: pointer;
@@ -38,29 +39,48 @@
   gap: 5px;
   padding: 8px;
   align-items: flex-end;
+  mix-blend-mode: difference;
   transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
               transform 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.burgerLine1 {
-  width: 18px;
+.burgerLine1,
+.burgerLine2,
+.burgerLine3 {
   height: 2px;
   background-color: #ffffff;
   border-radius: 1px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+              width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transform-origin: right center;
+}
+
+.burgerLine1 {
+  width: 18px;
 }
 
 .burgerLine2 {
   width: 24px;
-  height: 2px;
-  background-color: #ffffff;
-  border-radius: 1px;
 }
 
 .burgerLine3 {
   width: 12px;
-  height: 2px;
-  background-color: #ffffff;
-  border-radius: 1px;
+}
+
+.burgerButton.open .burgerLine1 {
+  transform: rotate(-45deg) translate(-2px, -3px);
+  width: 24px;
+}
+
+.burgerButton.open .burgerLine2 {
+  opacity: 0;
+  width: 0;
+}
+
+.burgerButton.open .burgerLine3 {
+  transform: rotate(45deg) translate(-2px, 3px);
+  width: 24px;
 }
 
 /* Fullscreen Overlay Menu styling */

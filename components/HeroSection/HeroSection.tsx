@@ -10,9 +10,12 @@ interface HeroSectionProps {
 export default function HeroSection({ isVisible }: HeroSectionProps) {
   const trackRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
+  const targetProgressRef = useRef(0);
+  const currentProgressRef = useRef(0);
 
   useEffect(() => {
     let active = true;
+
     const handleScroll = () => {
       if (!trackRef.current) return;
       const rect = trackRef.current.getBoundingClientRect();
@@ -23,15 +26,28 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
       
       const currentScroll = -rect.top;
       const pct = Math.min(Math.max(currentScroll / totalScrollable, 0), 1);
+      targetProgressRef.current = pct;
+    };
+
+    const updateProgress = () => {
+      if (!active) return;
       
-      if (active) {
-        window.requestAnimationFrame(() => {
-          setProgress(pct);
-        });
+      const ease = 0.06; // Lower value = more viscous / heavier feel
+      const diff = targetProgressRef.current - currentProgressRef.current;
+      
+      currentProgressRef.current += diff * ease;
+      
+      if (Math.abs(diff) > 0.0001) {
+        setProgress(currentProgressRef.current);
+      } else {
+        setProgress(targetProgressRef.current);
       }
+
+      requestAnimationFrame(updateProgress);
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
+    requestAnimationFrame(updateProgress);
     handleScroll();
 
     return () => {

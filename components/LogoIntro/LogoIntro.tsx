@@ -85,8 +85,8 @@ export default function LogoIntro() {
 
       {/* Unified Hamburger Menu Button (visible on all screens after logo settles) */}
       <button 
-        onClick={() => setIsMenuOpen(true)}
-        className={`${styles.burgerButton} ${
+        onClick={() => setIsMenuOpen(!isMenuOpen)}
+        className={`${styles.burgerButton} ${isMenuOpen ? styles.open : ""} ${
           isAtLeft ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
         style={{
@@ -105,16 +105,8 @@ export default function LogoIntro() {
           isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Header inside overlay */}
-        <div className={styles.menuHeader}>
-          <span className={styles.overlayLogo}>Vgen</span>
-          <button 
-            onClick={() => setIsMenuOpen(false)}
-            className={styles.closeButton}
-          >
-            Close
-          </button>
-        </div>
+        {/* Header spacer inside overlay */}
+        <div className={styles.menuHeader} />
 
         {/* Vertical menu links */}
         <div className={styles.menuItems}>
