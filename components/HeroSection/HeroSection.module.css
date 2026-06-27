@@ -1,24 +1,31 @@
-.heroContainer {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.heroWrapper {
+  width: 100%;
   opacity: 0;
-  transform: scale(0.98);
+  transform: translateY(20px);
   transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1),
               transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
   box-sizing: border-box;
-  background-color: #ffffff;
 }
 
 .visible {
   opacity: 1;
-  transform: scale(1);
+  transform: translateY(0);
 }
 
-/* Thin Grid Lines (Crosshair) */
+.section {
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Thin Grid Lines (Crosshair) - Only in Section 1 */
 .horizLine {
   position: absolute;
   left: 0;
@@ -74,52 +81,19 @@
   padding-left: 0.25em;
 }
 
-/* Scroll to Explore Indicator at the Bottom */
-.scrollIndicator {
-  position: absolute;
-  bottom: var(--logo-offset);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  z-index: 2;
-  background-color: #ffffff;
-  padding: 10px 20px;
+/* Section 2: Media Section */
+.mediaCard {
+  width: calc(100% - 20px);
+  height: calc(100vh - 80px);
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
 }
 
-.scrollText {
-  font-family: var(--font-sans);
-  font-size: clamp(9px, 1vw, 10px);
-  font-weight: 300;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: #a1a1aa;
-}
-
-.scrollLine {
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(to bottom, #a1a1aa, transparent);
-  animation: scrollDown 2s infinite ease-in-out;
-}
-
-@keyframes scrollDown {
-  0% {
-    transform: scaleY(0);
-    transform-origin: top;
-  }
-  50% {
-    transform: scaleY(1);
-    transform-origin: top;
-  }
-  50.1% {
-    transform: scaleY(1);
-    transform-origin: bottom;
-  }
-  100% {
-    transform: scaleY(0);
-    transform-origin: bottom;
-  }
+.mediaImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }

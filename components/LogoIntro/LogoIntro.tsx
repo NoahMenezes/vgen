@@ -5,7 +5,6 @@ import styles from "./LogoIntro.module.css";
 import HeroSection from "../HeroSection/HeroSection";
 
 export default function LogoIntro() {
-  const [animationKey, setAnimationKey] = useState(0);
   const [isCurtainUp, setIsCurtainUp] = useState(false);
   const [isAtLeft, setIsAtLeft] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
@@ -31,7 +30,7 @@ export default function LogoIntro() {
       clearTimeout(curtainTimer);
       clearTimeout(leftTimer);
     };
-  }, [animationKey]);
+  }, []);
 
   // Lock scroll during intro, unlock to allow normal scrolling once logo is positioned
   useEffect(() => {
@@ -44,19 +43,13 @@ export default function LogoIntro() {
     return () => {
       document.body.style.overflow = "hidden";
     };
-  }, [isAtLeft, animationKey]);
+  }, [isAtLeft]);
 
   const handleHomeClick = () => {
     setIsMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const handleReplay = () => {
-    setIsCurtainUp(false);
-    setIsAtLeft(false);
-    setIsMenuOpen(false);
-    setAnimationKey((prev) => prev + 1);
-  };
 
   if (!hasMounted) {
     return <div className="min-h-screen bg-black" />;
@@ -64,7 +57,6 @@ export default function LogoIntro() {
 
   return (
     <div 
-      key={animationKey} 
       className={`bg-white min-h-screen relative select-none ${isAtLeft ? "overflow-visible" : "overflow-hidden"}`}
     >
       
@@ -190,28 +182,8 @@ export default function LogoIntro() {
             Contact
           </span>
         </div>
-      </div>
-
-      {/* Hero Section (Fades and slides in once the logo settles at top-left) */}
+      </div>      {/* Hero Section (Fades and slides in once the logo settles at top-left) */}
       <HeroSection isVisible={isAtLeft} />
-
-      {/* Subtle Replay Button at the bottom (fades in on the white background) */}
-      <div 
-        className={`fixed z-20 transition-opacity duration-1000 ${
-          isAtLeft ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        }`}
-        style={{
-          bottom: "var(--logo-offset)",
-          right: "var(--logo-offset)",
-        }}
-      >
-        <button
-          onClick={handleReplay}
-          className="text-[10px] uppercase tracking-[0.2em] text-zinc-400 hover:text-black transition-colors cursor-pointer border border-zinc-200 hover:border-black px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-xs"
-        >
-          Replay
-        </button>
-      </div>
 
     </div>
   );

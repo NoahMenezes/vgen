@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import styles from "./HeroSection.module.css";
 
 interface HeroSectionProps {
@@ -8,23 +9,32 @@ interface HeroSectionProps {
 
 export default function HeroSection({ isVisible }: HeroSectionProps) {
   return (
-    <div className={`${styles.heroContainer} ${isVisible ? styles.visible : ""}`}>
+    <div className={`${styles.heroWrapper} ${isVisible ? styles.visible : ""}`}>
       
-      {/* Grid crosshair lines */}
-      <div className={styles.horizLine} />
-      <div className={styles.vertLine} />
+      {/* SECTION 1: Minimal Centered Landing */}
+      <section className={styles.section}>
+        <div className={styles.horizLine} />
+        <div className={styles.vertLine} />
 
-      {/* Centered agency overview */}
-      <div className={styles.centerBlock}>
-        <h2 className={styles.title}>Vgen</h2>
-        <p className={styles.subtitle}>Web · App · AI Agent Services</p>
-      </div>
+        <div className={styles.centerBlock}>
+          <h2 className={styles.title}>Vgen</h2>
+          <p className={styles.subtitle}>Web · App · AI Agent Services</p>
+        </div>
+      </section>
 
-      {/* Scroll Explore Indicator */}
-      <div className={styles.scrollIndicator}>
-        <span className={styles.scrollText}>Scroll to explore</span>
-        <div className={styles.scrollLine} />
-      </div>
+      {/* SECTION 2: Large Rounded Media Card */}
+      <section className={styles.section}>
+        <div className={styles.mediaCard}>
+          <Image 
+            src="/hero_video_placeholder.png" 
+            alt="Vgen Generative Media Placeholder" 
+            className={styles.mediaImage}
+            fill
+            priority
+            sizes="(max-width: 768px) 100vw, 95vw"
+          />
+        </div>
+      </section>
 
     </div>
   );
