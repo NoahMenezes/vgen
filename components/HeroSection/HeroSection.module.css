@@ -13,26 +13,29 @@
 }
 
 .section {
-  height: 100vh;
+  min-height: 100vh;
   width: 100%;
   position: relative;
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  overflow: hidden;
   box-sizing: border-box;
+}
+
+.landingSection {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #0a0a0a;
 }
 
-/* Thin Grid Lines (Crosshair) - Only in Section 1 */
+/* Thin Grid Lines (Crosshair) */
 .horizLine {
   position: absolute;
   left: 0;
   right: 0;
   top: 50%;
   height: 1px;
-  background-color: #f1f1f4;
+  background-color: #1f1f23;
   z-index: 1;
 }
 
@@ -42,15 +45,15 @@
   bottom: 0;
   left: 50%;
   width: 1px;
-  background-color: #f1f1f4;
+  background-color: #1f1f23;
   z-index: 1;
 }
 
-/* Center Text Container with White Mask */
+/* Center Text Container with Dark Mask */
 .centerBlock {
   position: relative;
   z-index: 2;
-  background-color: #ffffff;
+  background-color: #0a0a0a;
   padding: 32px 48px;
   text-align: center;
   display: flex;
@@ -65,9 +68,9 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.3em;
-  color: #000000;
+  color: #ffffff;
   margin: 0;
-  padding-left: 0.3em; /* offsets the letter spacing so text is centered exactly */
+  padding-left: 0.3em;
 }
 
 .subtitle {
@@ -76,24 +79,164 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: #71717a;
+  color: #a1a1aa;
   margin: 0;
   padding-left: 0.25em;
 }
 
-/* Section 2: Media Section */
+/* SECTION 2: Horizontal Scroll Track */
+.track {
+  position: relative;
+  height: 300vh; /* scroll length for 3 slides */
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #0a0a0a;
+}
+
+/* Invisible Vertical snap targets inside track */
+.snapPoint {
+  height: 100vh;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  pointer-events: none;
+}
+
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.horizontalContainer {
+  display: flex;
+  width: 300vw;
+  height: 100%;
+  transition: transform 0.1s ease-out; /* slight transition to smooth out scroll events */
+  will-change: transform;
+}
+
+.slide {
+  width: 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+/* Media Card (White Empty Video Section) */
 .mediaCard {
   width: calc(100% - 20px);
   height: calc(100vh - 80px);
   border-radius: 24px;
+  background-color: #ffffff;
   overflow: hidden;
   position: relative;
   box-sizing: border-box;
 }
 
-.mediaImage {
+/* SECTION 3: Overview Section */
+.overviewSection {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px var(--logo-offset);
+  box-sizing: border-box;
+}
+
+.overviewGrid {
+  display: grid;
+  grid-template-columns: 1fr;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+  max-width: 1200px;
+  gap: 40px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .overviewGrid {
+    grid-template-columns: 1fr 3fr;
+    gap: 80px;
+  }
+}
+
+.labelCol {
+  display: flex;
+  flex-direction: column;
+  gap: 160px;
+}
+
+.overviewLabel {
+  font-family: var(--font-sans);
+  font-size: clamp(11px, 1.2vw, 13px);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #ffffff;
+  margin: 0;
+}
+
+.contentCol {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.overviewHeadline {
+  font-family: var(--font-serif-headline);
+  font-size: clamp(20px, 3vw, 36px);
+  font-weight: 300;
+  line-height: 1.4;
+  color: #ffffff;
+  margin: 0;
+}
+
+.overviewParagraph {
+  font-family: var(--font-sans);
+  font-size: clamp(13px, 1.4vw, 15px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: #a1a1aa;
+  max-width: 760px;
+  margin: 0;
+}
+
+/* Services Grid cells */
+.servicesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  margin-top: 48px;
+}
+
+@media (min-width: 640px) {
+  .servicesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.serviceCell {
+  border: 1px solid #27272a;
+  border-radius: 12px;
+  padding: 24px;
+  font-family: var(--font-sans);
+  font-size: clamp(12px, 1.3vw, 14px);
+  font-weight: 300;
+  color: #e4e4e7;
+  display: flex;
+  align-items: center;
+  transition: border-color 0.3s ease, color 0.3s ease;
+}
+
+.serviceCell:hover {
+  border-color: #52525b;
+  color: #ffffff;
 }

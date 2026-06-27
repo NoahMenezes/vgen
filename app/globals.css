@@ -22,8 +22,8 @@ html {
 }
 
 body {
-  background: #ffffff;
-  color: #000000;
+  background: #0a0a0a;
+  color: #ffffff;
   font-family: var(--font-geist-sans), Arial, sans-serif;
   overflow: hidden;
 }
@@ -33,12 +33,12 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #ffffff;
+  background: #0a0a0a;
 }
 ::-webkit-scrollbar-thumb {
-  background: #e4e4e7;
+  background: #27272a;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #d4d4d8;
+  background: #3f3f46;
 }

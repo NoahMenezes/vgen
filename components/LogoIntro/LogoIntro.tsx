@@ -57,7 +57,7 @@ export default function LogoIntro() {
 
   return (
     <div 
-      className={`bg-white min-h-screen relative select-none ${isAtLeft ? "overflow-visible" : "overflow-hidden"}`}
+      className={`bg-[#0a0a0a] min-h-screen relative select-none ${isAtLeft ? "overflow-visible" : "overflow-hidden"}`}
     >
       
       {/* Black Curtain Section (in front initially) */}
@@ -83,106 +83,68 @@ export default function LogoIntro() {
         Vgen
       </h1>
 
-      {/* Desktop & Tablet Navigation (appears on the top-right after logo moves left) */}
-      <nav 
-        className={`${styles.desktopNav} fixed z-20 items-center transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isAtLeft ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
-        }`}
-        style={{
-          top: "var(--logo-offset)",
-          right: "var(--logo-offset)",
-          gap: "clamp(16px, 2vw, 32px)",
-          fontSize: "clamp(10px, 1vw, 12px)",
-        }}
-      >
-        <span 
-          onClick={handleHomeClick}
-          className="font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-colors"
-        >
-          Home
-        </span>
-        <span className="font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-colors">
-          Services
-        </span>
-        <span className="font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-colors">
-          Work
-        </span>
-        <span className="font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-colors">
-          OurStory
-        </span>
-        <span className="font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-colors">
-          Contact
-        </span>
-      </nav>
-
-      {/* Mobile Menu Toggle Button (displays below md breakpoint) */}
+      {/* Unified Hamburger Menu Button (visible on all screens after logo settles) */}
       <button 
         onClick={() => setIsMenuOpen(true)}
-        className={`${styles.mobileNavTrigger} fixed z-20 font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`${styles.burgerButton} ${
           isAtLeft ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
         style={{
           top: "var(--logo-offset)",
           right: "var(--logo-offset)",
-          fontSize: "clamp(10px, 1.5vw, 12px)",
         }}
       >
-        Menu
+        <span className={styles.burgerLine1} />
+        <span className={styles.burgerLine2} />
+        <span className={styles.burgerLine3} />
       </button>
 
-      {/* Fullscreen Mobile Overlay Menu */}
+      {/* Fullscreen Overlay Menu */}
       <div 
-        className={`fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex flex-col items-center justify-center transition-all duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-          isMenuOpen ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-full pointer-events-none"
+        className={`${styles.menuOverlay} ${
+          isMenuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
       >
-        {/* Close button in top right */}
-        <button 
-          onClick={() => setIsMenuOpen(false)}
-          className="absolute font-sans font-light uppercase tracking-[0.2em] text-white hover:text-zinc-400 cursor-pointer"
-          style={{
-            top: "var(--logo-offset)",
-            right: "var(--logo-offset)",
-            fontSize: "clamp(10px, 1.5vw, 12px)",
-          }}
-        >
-          Close
-        </button>
+        {/* Header inside overlay */}
+        <div className={styles.menuHeader}>
+          <span className={styles.overlayLogo}>Vgen</span>
+          <button 
+            onClick={() => setIsMenuOpen(false)}
+            className={styles.closeButton}
+          >
+            Close
+          </button>
+        </div>
 
         {/* Vertical menu links */}
-        <div className="flex flex-col items-center gap-8">
-          <span 
-            onClick={handleHomeClick}
-            className="font-serif-headline text-3xl uppercase tracking-[0.25em] text-white cursor-pointer hover:text-zinc-400 transition-colors"
-          >
+        <div className={styles.menuItems}>
+          <span onClick={handleHomeClick} className={styles.menuLink}>
             Home
           </span>
-          <span 
-            onClick={() => setIsMenuOpen(false)}
-            className="font-serif-headline text-3xl uppercase tracking-[0.25em] text-white cursor-pointer hover:text-zinc-400 transition-colors"
-          >
+          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             Services
           </span>
-          <span 
-            onClick={() => setIsMenuOpen(false)}
-            className="font-serif-headline text-3xl uppercase tracking-[0.25em] text-white cursor-pointer hover:text-zinc-400 transition-colors"
-          >
+          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             Work
           </span>
-          <span 
-            onClick={() => setIsMenuOpen(false)}
-            className="font-serif-headline text-3xl uppercase tracking-[0.25em] text-white cursor-pointer hover:text-zinc-400 transition-colors"
-          >
+          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             OurStory
           </span>
-          <span 
-            onClick={() => setIsMenuOpen(false)}
-            className="font-serif-headline text-3xl uppercase tracking-[0.25em] text-white cursor-pointer hover:text-zinc-400 transition-colors"
-          >
+          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             Contact
           </span>
         </div>
-      </div>      {/* Hero Section (Fades and slides in once the logo settles at top-left) */}
+
+        {/* Footer inside overlay */}
+        <div className={styles.menuFooter}>
+          <span className={styles.supportLabel}>Need Support?</span>
+          <a href="mailto:hello@vgen.co" className={styles.supportEmail}>
+            hello@vgen.co
+          </a>
+        </div>
+      </div>
+
+      {/* Hero Section (Fades and slides in once the logo settles at top-left) */}
       <HeroSection isVisible={isAtLeft} />
 
     </div>

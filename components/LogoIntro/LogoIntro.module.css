@@ -16,29 +16,155 @@
   top: var(--logo-offset);
   left: var(--logo-offset);
   transform: translate3d(calc(50vw - 50% - var(--logo-offset)), 0, 0);
-  color: #000000;
+  color: #ffffff;
 }
 
 .logoStage2 {
   top: var(--logo-offset);
   left: var(--logo-offset);
   transform: translate3d(0, 0, 0);
-  color: #000000;
+  color: #ffffff;
 }
 
-.desktopNav {
-  display: none;
+/* Custom Hamburger Menu Button */
+.burgerButton {
+  position: fixed;
+  z-index: 20;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 8px;
+  align-items: flex-end;
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.mobileNavTrigger {
-  display: block;
+.burgerLine1 {
+  width: 18px;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 1px;
 }
 
-@media (min-width: 768px) {
-  .desktopNav {
-    display: flex !important;
-  }
-  .mobileNavTrigger {
-    display: none !important;
-  }
+.burgerLine2 {
+  width: 24px;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 1px;
+}
+
+.burgerLine3 {
+  width: 12px;
+  height: 2px;
+  background-color: #ffffff;
+  border-radius: 1px;
+}
+
+/* Fullscreen Overlay Menu styling */
+.menuOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background-color: #0c0c0e; /* Deep dark grey/charcoal color */
+  padding: var(--logo-offset);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.menuHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.overlayLogo {
+  font-family: var(--font-serif-headline);
+  font-size: var(--logo-size);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #ffffff;
+}
+
+.closeButton {
+  font-family: var(--font-sans);
+  font-size: clamp(10px, 1.2vw, 12px);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #ffffff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+  transition: color 0.3s ease;
+}
+
+.closeButton:hover {
+  color: #a1a1aa;
+}
+
+/* Center items block */
+.menuItems {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding-left: clamp(0px, 4vw, 40px);
+}
+
+.menuLink {
+  font-family: var(--font-serif-headline);
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 300;
+  text-transform: capitalize;
+  color: #ffffff;
+  cursor: pointer;
+  width: fit-content;
+  transition: transform 0.4s ease, color 0.4s ease;
+}
+
+.menuLink:hover {
+  transform: translateX(12px);
+  color: #a1a1aa;
+}
+
+/* Support footer */
+.menuFooter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-left: clamp(0px, 4vw, 40px);
+}
+
+.supportLabel {
+  font-family: var(--font-sans);
+  font-size: clamp(9px, 1vw, 11px);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #71717a;
+  margin: 0;
+}
+
+.supportEmail {
+  font-family: var(--font-sans);
+  font-size: clamp(14px, 1.5vw, 18px);
+  font-weight: 300;
+  color: #ffffff;
+  text-decoration: none;
+  width: fit-content;
+  transition: color 0.3s ease;
+}
+
+.supportEmail:hover {
+  color: #a1a1aa;
 }
