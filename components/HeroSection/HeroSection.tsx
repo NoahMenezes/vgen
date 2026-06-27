@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./HeroSection.module.css";
-import AboutSection from "../AboutSection/AboutSection";
 
 interface HeroSectionProps {
   isVisible: boolean;
@@ -147,11 +146,6 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
 
         </div>
       </section>
-
-      {/* About Section on Homepage */}
-      <div id="about">
-        <AboutSection />
-      </div>
 
     </div>
   );

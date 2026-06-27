@@ -33,8 +33,9 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${playfairDisplay.variable} h-full antialiased`}
+      data-scroll-behavior="smooth"
     >
-      <body className="min-h-full flex flex-col bg-white text-black overflow-hidden">{children}</body>
+      <body className="min-h-full flex flex-col bg-white text-black overflow-x-hidden">{children}</body>
     </html>
   );
 }
