@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
 import styles from "./LogoIntro.module.css";
 import HeroSection from "../HeroSection/HeroSection";
 
@@ -49,6 +48,14 @@ export default function LogoIntro() {
   const handleHomeClick = () => {
     setIsMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleAboutClick = () => {
+    setIsMenuOpen(false);
+    const target = document.getElementById("about");
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
 
@@ -120,9 +127,9 @@ export default function LogoIntro() {
           <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             Work
           </span>
-          <Link href="/about" className={styles.menuLink}>
-            OurStory
-          </Link>
+          <span onClick={handleAboutClick} className={styles.menuLink}>
+            About
+          </span>
           <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
             Contact
           </span>
