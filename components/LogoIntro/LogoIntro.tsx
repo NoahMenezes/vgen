@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import styles from "./LogoIntro.module.css";
+import HeroSection from "../HeroSection/HeroSection";
 
 export default function LogoIntro() {
   const [animationKey, setAnimationKey] = useState(0);
@@ -32,6 +33,24 @@ export default function LogoIntro() {
     };
   }, [animationKey]);
 
+  // Lock scroll during intro, unlock to allow normal scrolling once logo is positioned
+  useEffect(() => {
+    if (isAtLeft) {
+      document.body.style.overflowY = "auto";
+      document.body.style.overflowX = "hidden";
+    } else {
+      document.body.style.overflow = "hidden";
+    }
+    return () => {
+      document.body.style.overflow = "hidden";
+    };
+  }, [isAtLeft, animationKey]);
+
+  const handleHomeClick = () => {
+    setIsMenuOpen(false);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const handleReplay = () => {
     setIsCurtainUp(false);
     setIsAtLeft(false);
@@ -46,7 +65,7 @@ export default function LogoIntro() {
   return (
     <div 
       key={animationKey} 
-      className="bg-white min-h-screen relative overflow-hidden select-none"
+      className={`bg-white min-h-screen relative select-none ${isAtLeft ? "overflow-visible" : "overflow-hidden"}`}
     >
       
       {/* Black Curtain Section (in front initially) */}
@@ -74,7 +93,7 @@ export default function LogoIntro() {
 
       {/* Desktop & Tablet Navigation (appears on the top-right after logo moves left) */}
       <nav 
-        className={`fixed z-20 hidden md:flex items-center transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`${styles.desktopNav} fixed z-20 items-center transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isAtLeft ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
         style={{
@@ -84,7 +103,10 @@ export default function LogoIntro() {
           fontSize: "clamp(10px, 1vw, 12px)",
         }}
       >
-        <span className="font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-colors">
+        <span 
+          onClick={handleHomeClick}
+          className="font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-colors"
+        >
           Home
         </span>
         <span className="font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-colors">
@@ -104,7 +126,7 @@ export default function LogoIntro() {
       {/* Mobile Menu Toggle Button (displays below md breakpoint) */}
       <button 
         onClick={() => setIsMenuOpen(true)}
-        className={`fixed z-20 md:hidden font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+        className={`${styles.mobileNavTrigger} fixed z-20 font-sans font-light uppercase tracking-[0.2em] text-black cursor-pointer hover:text-zinc-500 transition-all duration-1000 ease-[cubic-bezier(0.16,1,0.3,1)] ${
           isAtLeft ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-4 pointer-events-none"
         }`}
         style={{
@@ -138,7 +160,7 @@ export default function LogoIntro() {
         {/* Vertical menu links */}
         <div className="flex flex-col items-center gap-8">
           <span 
-            onClick={() => setIsMenuOpen(false)}
+            onClick={handleHomeClick}
             className="font-serif-headline text-3xl uppercase tracking-[0.25em] text-white cursor-pointer hover:text-zinc-400 transition-colors"
           >
             Home
@@ -169,6 +191,9 @@ export default function LogoIntro() {
           </span>
         </div>
       </div>
+
+      {/* Hero Section (Fades and slides in once the logo settles at top-left) */}
+      <HeroSection isVisible={isAtLeft} />
 
       {/* Subtle Replay Button at the bottom (fades in on the white background) */}
       <div 

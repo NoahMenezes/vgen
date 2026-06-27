@@ -1,0 +1,125 @@
+.heroContainer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 1.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  background-color: #ffffff;
+}
+
+.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Thin Grid Lines (Crosshair) */
+.horizLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background-color: #f1f1f4;
+  z-index: 1;
+}
+
+.vertLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background-color: #f1f1f4;
+  z-index: 1;
+}
+
+/* Center Text Container with White Mask */
+.centerBlock {
+  position: relative;
+  z-index: 2;
+  background-color: #ffffff;
+  padding: 32px 48px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.title {
+  font-family: var(--font-serif-headline);
+  font-size: clamp(36px, 6vw, 72px);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: #000000;
+  margin: 0;
+  padding-left: 0.3em; /* offsets the letter spacing so text is centered exactly */
+}
+
+.subtitle {
+  font-family: var(--font-sans);
+  font-size: clamp(10px, 1.2vw, 12px);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  color: #71717a;
+  margin: 0;
+  padding-left: 0.25em;
+}
+
+/* Scroll to Explore Indicator at the Bottom */
+.scrollIndicator {
+  position: absolute;
+  bottom: var(--logo-offset);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+  background-color: #ffffff;
+  padding: 10px 20px;
+}
+
+.scrollText {
+  font-family: var(--font-sans);
+  font-size: clamp(9px, 1vw, 10px);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #a1a1aa;
+}
+
+.scrollLine {
+  width: 1px;
+  height: 40px;
+  background: linear-gradient(to bottom, #a1a1aa, transparent);
+  animation: scrollDown 2s infinite ease-in-out;
+}
+
+@keyframes scrollDown {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  50.1% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}

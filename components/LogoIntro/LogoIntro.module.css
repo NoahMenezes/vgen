@@ -25,3 +25,20 @@
   transform: translate3d(0, 0, 0);
   color: #000000;
 }
+
+.desktopNav {
+  display: none;
+}
+
+.mobileNavTrigger {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .desktopNav {
+    display: flex !important;
+  }
+  .mobileNavTrigger {
+    display: none !important;
+  }
+}
