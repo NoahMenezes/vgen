@@ -119,6 +119,15 @@ export default function LogoIntro() {
           <Link href="/about" className={styles.menuLink}>
             About
           </Link>
+          <Link href="/work" className={styles.menuLink} onClick={() => setIsMenuOpen(false)}>
+            Work
+          </Link>
+          <Link href="/services" className={styles.menuLink} onClick={() => setIsMenuOpen(false)}>
+            Services
+          </Link>
+          <Link href="/contact" className={styles.menuLink} onClick={() => setIsMenuOpen(false)}>
+            Contact
+          </Link>
         </div>
 
         {/* Footer inside overlay */}
