@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./HeroSection.module.css";
@@ -19,6 +20,32 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
   const centerBlockRef = useRef<HTMLDivElement>(null);
   const servicesSectionRef = useRef<HTMLDivElement>(null);
   
+  // Timeline beam animation hooks
+  const { scrollYProgress: servicesProgress } = useScroll({
+    target: servicesSectionRef,
+    offset: ["start center", "end end"]
+  });
+  
+  const beamHeight = useTransform(servicesProgress, [0, 1], ["0%", "100%"]);
+  
+  const beamColor = useTransform(
+    servicesProgress,
+    [0, 0.25, 0.5, 0.75, 1],
+    ["#06b6d4", "#3b82f6", "#8b5cf6", "#ec4899", "#f97316"] // cyan -> blue -> purple -> pink -> orange
+  );
+  
+  const beamShadow = useTransform(
+    servicesProgress,
+    [0, 0.25, 0.5, 0.75, 1],
+    [
+      "0 0 20px 4px rgba(6, 182, 212, 0.8)",
+      "0 0 20px 4px rgba(59, 130, 246, 0.8)",
+      "0 0 20px 4px rgba(139, 92, 246, 0.8)",
+      "0 0 20px 4px rgba(236, 72, 153, 0.8)",
+      "0 0 20px 4px rgba(249, 115, 22, 0.8)",
+    ]
+  );
+    
   const [progress, setProgress] = useState(0);
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
@@ -247,51 +274,63 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
         </div>
       </section>
 
-      {/* SECTION 5: Services Section (White background) */}
+      {/* SECTION 5: Services Timeline Section (Dark background for glowing beam contrast) */}
       <section 
         ref={servicesSectionRef}
-        className={`${styles.section} ${styles.servicesSection}`}
+        className="w-full bg-[#0a0a0a] text-white relative py-48 select-none"
       >
-        <div className={styles.overviewGrid}>
-          {/* Left Column Labels */}
-          <div className={styles.labelCol}>
-            <h3 className={styles.overviewLabel}>Services</h3>
+        <div className="max-w-[1400px] mx-auto w-full px-8 md:px-16 flex gap-8 md:gap-24 relative">
+          
+          {/* Left Sticky Label */}
+          <div className="hidden md:flex w-32 flex-col items-start pt-12 relative z-10">
+            <h3 className="sticky top-48 font-sans text-xs tracking-[0.2em] text-white/40 uppercase">
+              Services
+            </h3>
           </div>
 
-          {/* Right Column Main content */}
-          <div className={styles.contentCol}>
-            {/* Services Stacking Cards */}
-            <div className={styles.cardsStack}>
-              {services.map((service, index) => {
-                const cardClass = 
-                  index === 0 ? styles.card1 :
-                  index === 1 ? styles.card2 :
-                  index === 2 ? styles.card3 :
-                  index === 3 ? styles.card4 :
-                  index === 4 ? styles.card5 :
-                  styles.card6;
+          {/* Center Timeline Track */}
+          <div className="relative w-1 flex-shrink-0 ml-4 md:ml-0">
+             {/* Faint base line */}
+             <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-white/10" />
+             {/* Glowing beam animated dynamically on scroll */}
+             <motion.div 
+               className="absolute top-0 left-0 w-[2px] -ml-[0.5px]"
+               style={{ 
+                 height: beamHeight,
+                 backgroundColor: beamColor,
+                 boxShadow: beamShadow
+               }}
+             />
+          </div>
 
-                return (
-                  <div
-                    key={index}
-                    className={`${styles.serviceCard} ${cardClass}`}
-                    style={{ "--index": index } as React.CSSProperties}
-                  >
-                    <div className={styles.cardHeader}>
-                      <h4 className={styles.cardTitle}>{service.title}</h4>
-                      <span className={styles.cardNum}>{service.num}</span>
-                    </div>
-                    <div className={styles.cardBody}>
-                      <p className={styles.cardText}>{service.content}</p>
-                    </div>
+          {/* Right Content */}
+          <div className="flex-1 flex flex-col gap-[50vh] pb-[20vh] pt-12">
+            {services.map((service, index) => (
+              <div key={index} className="flex flex-col relative w-full">
+                
+                {/* Horizontal Connector Line */}
+                <div className="absolute top-[28px] -left-8 md:-left-24 w-8 md:w-24 h-[1px] bg-white/10" />
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+                  whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                  viewport={{ once: false, margin: "-150px" }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                >
+                  <div className="flex flex-col gap-4 mb-8">
+                    <span className="font-serif-headline text-3xl italic text-white/80 mb-2 drop-shadow-md">{service.num}</span>
+                    <h4 className="font-sans text-4xl md:text-6xl lg:text-7xl tracking-tighter text-white font-bold leading-[1.1] drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
+                      {service.title}
+                    </h4>
                   </div>
-                );
-              })}
-            </div>
+                  <p className="font-sans text-lg md:text-2xl text-white/95 font-medium max-w-2xl leading-relaxed pl-6 md:pl-10 border-l-2 border-white/30 drop-shadow-sm">
+                    {service.content}
+                  </p>
+                </motion.div>
+              </div>
+            ))}
           </div>
         </div>
-
-        {/* Removed transitionBall as it's now a single-page site */}
       </section>
 
     </div>
