@@ -50,6 +50,24 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
       "0 0 20px 4px rgba(249, 115, 22, 0.8)",
     ]
   );
+
+  // Generate a smooth curvy path for the timeline that sweeps across the full width of the screen
+  const curvyPathDFullWidth = (() => {
+    const points = [];
+    const steps = 150;
+    const height = 1000;
+    const width = 1000;
+    const centerX = width / 2;
+    const amplitude = 420; // Sweeps from 80 (left side) to 920 (right side) in a 1000px width viewBox
+    const cycles = 3; // Number of wave cycles down the timeline (Left -> Center -> Right -> Center -> Left)
+    
+    for (let i = 0; i <= steps; i++) {
+      const y = (i / steps) * height;
+      const x = centerX - Math.cos((i / steps) * Math.PI * 2 * cycles) * amplitude;
+      points.push(`${i === 0 ? "M" : "L"} ${x} ${y}`);
+    }
+    return points.join(" ");
+  })();
     
   const [progress, setProgress] = useState(0);
   const targetProgressRef = useRef(0);
@@ -237,7 +255,7 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
             <ScrollReveal
               baseOpacity={0.1}
               enableBlur
-              baseRotation={3}
+              baseRotation={0}
               blurStrength={4}
             >
               Born in a digital-first studio, Vgen is a modern production collective built on craft, quality, and considered design. We bring globally sourced, locally optimized digital systems to thoughtfully designed interfaces across the web and beyond, creating unforgettable experiences for forward-thinking brands.
@@ -259,7 +277,7 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
             <ScrollReveal
               baseOpacity={0.1}
               enableBlur
-              baseRotation={3}
+              baseRotation={0}
               blurStrength={4}
             >
               Vgen was brought in to elevate next-generation digital presences and create websites that better reflect each brand&apos;s design-led ethos and distinctive spaces. Each workspace is defined by its own architectural character and sense of place, an approach that informs our work from strategy through execution.
@@ -270,7 +288,7 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
             <ScrollReveal
               baseOpacity={0.1}
               enableBlur
-              baseRotation={3}
+              baseRotation={0}
               blurStrength={4}
             >
               The result is a design-forward digital suite that showcases identity with clarity and intention, providing a beautifully considered experience.
@@ -282,36 +300,61 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
       {/* SECTION 5: Services Timeline Section (Dark background for glowing beam contrast) */}
       <section 
         ref={servicesSectionRef}
-        className="w-full bg-[#0a0a0a] text-white relative py-48 select-none"
+        className="w-full bg-[#0a0a0a] text-white relative py-48 select-none overflow-hidden"
       >
-        <div className="max-w-[1400px] mx-auto w-full px-8 md:px-16 flex gap-8 md:gap-24 relative">
-          
-          {/* Left Sticky Label (Hidden on Mobile logically to save DOM elements) */}
-          {(!isMounted || !isMobile) && (
-            <div className="hidden md:flex w-32 flex-col items-start pt-12 relative z-10">
-              <h3 className="sticky top-48 font-sans text-xs tracking-[0.2em] text-white/40 uppercase">
-                Services
-              </h3>
-            </div>
-          )}
+        {/* Full-width Curvy Timeline SVG in background */}
+        <div className="absolute inset-0 w-full h-full pointer-events-none z-0">
+          <svg width="100%" height="100%" preserveAspectRatio="none" viewBox="0 0 1000 1000" className="overflow-visible">
+            {/* Base curvy track */}
+            <path 
+              d={curvyPathDFullWidth}
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.05)"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+            {/* Layer 1: Wide Outer Glow (12px, 15% opacity) */}
+            <motion.path 
+              d={curvyPathDFullWidth}
+              fill="none"
+              stroke={beamColor}
+              strokeWidth="14"
+              strokeLinecap="round"
+              opacity="0.12"
+              style={{ 
+                pathLength: servicesProgress
+              }}
+            />
+            {/* Layer 2: Medium Inner Glow (6px, 35% opacity) */}
+            <motion.path 
+              d={curvyPathDFullWidth}
+              fill="none"
+              stroke={beamColor}
+              strokeWidth="7"
+              strokeLinecap="round"
+              opacity="0.35"
+              style={{ 
+                pathLength: servicesProgress
+              }}
+            />
+            {/* Layer 3: Solid Core (3px, 100% opacity) */}
+            <motion.path 
+              d={curvyPathDFullWidth}
+              fill="none"
+              stroke={beamColor}
+              strokeWidth="3"
+              strokeLinecap="round"
+              opacity="1"
+              style={{ 
+                pathLength: servicesProgress
+              }}
+            />
+          </svg>
+        </div>
 
-          {/* Center Timeline Track */}
-          <div className="relative w-1 flex-shrink-0 ml-4 md:ml-0">
-             {/* Faint base line */}
-             <div className="absolute top-0 bottom-0 left-0 w-[1px] bg-white/10" />
-             {/* Glowing beam animated dynamically on scroll */}
-             <motion.div 
-               className="absolute top-0 left-0 w-[2px] -ml-[0.5px]"
-               style={{ 
-                 height: beamHeight,
-                 backgroundColor: beamColor,
-                 boxShadow: beamShadow
-               }}
-             />
-          </div>
-
-          {/* Right Content */}
-          <div className="flex-1 flex flex-col gap-[50vh] pb-[20vh] pt-12">
+        <div className="max-w-[1200px] mx-auto w-full px-8 md:px-16 relative z-10">
+          {/* Centered Content */}
+          <div className="flex flex-col gap-[50vh] pb-[20vh] pt-12 items-center text-center">
             {services.map((service, index) => {
               const sectionColor = [
                 "#06b6d4", // 0: Cyan
@@ -323,24 +366,15 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
               ][index];
 
               return (
-                <div key={index} className="flex flex-col relative w-full">
-                  
-                  {/* Horizontal Connector Line dynamically adjusted for Mobile */}
-                  <div 
-                    className="absolute top-[28px] h-[1px] bg-white/10"
-                    style={{
-                      left: isMobile ? '-2rem' : '-6rem',
-                      width: isMobile ? '2rem' : '6rem'
-                    }}
-                  />
-                  
+                <div key={index} className="flex flex-col items-center w-full max-w-3xl">
                   <motion.div
                     initial={{ opacity: 0, y: isMobile ? 30 : 60, filter: "blur(10px)" }}
                     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    viewport={{ once: false, margin: isMobile ? "-80px" : "-150px" }}
+                    viewport={{ once: true, margin: isMobile ? "-40px" : "-100px" }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
+                    className="flex flex-col items-center text-center"
                   >
-                    <div className="flex flex-col gap-4 mb-8">
+                    <div className="flex flex-col gap-4 mb-8 items-center">
                       <span 
                         className="font-serif-headline text-3xl italic mb-2 drop-shadow-md"
                         style={{ color: sectionColor }}
@@ -357,10 +391,7 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
                         {service.title}
                       </h4>
                     </div>
-                    <p 
-                      className="font-sans text-lg md:text-2xl text-white/95 font-medium max-w-2xl leading-relaxed pl-6 md:pl-10 border-l-2 drop-shadow-sm"
-                      style={{ borderColor: sectionColor }}
-                    >
+                    <p className="font-sans text-lg md:text-2xl text-white/95 font-medium max-w-2xl leading-relaxed drop-shadow-sm">
                       {service.content}
                     </p>
                   </motion.div>
