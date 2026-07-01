@@ -7,6 +7,12 @@ import HeroSection from "../HeroSection";
 import AboutSection from "../AboutSection";
 import ContactSection from "../ContactSection";
 import FlowingMenu from "../FlowingMenu/FlowingMenu";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function LogoIntro() {
   const [isCurtainUp, setIsCurtainUp] = useState(false);
@@ -51,13 +57,61 @@ export default function LogoIntro() {
     };
   }, [isAtLeft]);
 
+  // Ball reveal scroll animation between About and Contact sections
+  useEffect(() => {
+    if (!isAtLeft) return;
+
+    const container = document.getElementById("transition-container");
+    const contactPanel = document.getElementById("contact-panel");
+
+    if (!container || !contactPanel) return;
+
+    const ctx = gsap.context(() => {
+      // Pin the About section container and scrub the circle clip path of the Contact panel
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: container,
+          start: "bottom bottom",
+          end: "+=100%", // duration of scroll-linked transition (1 viewport height)
+          pin: true,
+          scrub: true,
+          anticipatePin: 1,
+        }
+      });
+
+      tl.fromTo(contactPanel,
+        {
+          clipPath: "circle(0% at 50% 100%)",
+          WebkitClipPath: "circle(0% at 50% 100%)"
+        },
+        {
+          clipPath: "circle(150% at 50% 100%)",
+          WebkitClipPath: "circle(150% at 50% 100%)",
+          ease: "none"
+        }
+      );
+    });
+
+    return () => {
+      ctx.revert();
+    };
+  }, [isAtLeft]);
+
   const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setIsMenuOpen(false);
     const id = href.replace('#', '');
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+    if (id === "contact") {
+      // Scroll to the absolute bottom of the document to trigger the full expansion of the Contact section
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth"
+      });
+    } else {
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
@@ -155,11 +209,21 @@ export default function LogoIntro() {
       {/* Stacked Sections (Rendered only after intro completes) */}
       {isAtLeft && (
         <>
-          <div id="about">
+          <div id="transition-container" className="w-full relative">
             <AboutSection />
           </div>
-          <div id="contact">
-            <ContactSection />
+          
+          <div 
+            id="contact-panel" 
+            className="w-full h-screen fixed inset-0 z-30 pointer-events-none overflow-hidden"
+            style={{ 
+              clipPath: "circle(0px at 50% 100%)",
+              WebkitClipPath: "circle(0px at 50% 100%)"
+            }}
+          >
+            <div className="w-full h-full pointer-events-auto">
+              <ContactSection />
+            </div>
           </div>
         </>
       )}

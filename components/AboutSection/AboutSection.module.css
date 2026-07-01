@@ -3,8 +3,21 @@
   background-color: var(--background);
   color: var(--foreground);
   box-sizing: border-box;
-  padding: 120px var(--logo-offset) 80px;
+  padding: 0;
   transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.topPanel {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 120px var(--logo-offset) 60px;
+}
+
+.bottomPanel {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 60px var(--logo-offset) 80px;
+  background-color: var(--background);
 }
 
 .introText {
