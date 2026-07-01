@@ -49,7 +49,7 @@ export default function AboutSection() {
           start: "bottom bottom",
           end: "+=100%", // pin for 1 viewport height
           pin: true,
-          pinSpacing: true,
+          pinSpacing: false,
           scrub: true,
           anticipatePin: 1,
         }
