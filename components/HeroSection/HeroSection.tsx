@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useResponsive } from "../../hooks/useResponsive";
 import styles from "./HeroSection.module.css";
 import ScrollReveal from "./ScrollReveal";
 import StormBackground from "./StormBackground";
@@ -19,6 +20,9 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
   const landingSectionRef = useRef<HTMLDivElement>(null);
   const centerBlockRef = useRef<HTMLDivElement>(null);
   const servicesSectionRef = useRef<HTMLDivElement>(null);
+  
+  // Custom Responsive Logic
+  const { isMobile, isMounted } = useResponsive();
   
   // Timeline beam animation hooks
   const { scrollYProgress: servicesProgress } = useScroll({
@@ -282,12 +286,14 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
       >
         <div className="max-w-[1400px] mx-auto w-full px-8 md:px-16 flex gap-8 md:gap-24 relative">
           
-          {/* Left Sticky Label */}
-          <div className="hidden md:flex w-32 flex-col items-start pt-12 relative z-10">
-            <h3 className="sticky top-48 font-sans text-xs tracking-[0.2em] text-white/40 uppercase">
-              Services
-            </h3>
-          </div>
+          {/* Left Sticky Label (Hidden on Mobile logically to save DOM elements) */}
+          {(!isMounted || !isMobile) && (
+            <div className="hidden md:flex w-32 flex-col items-start pt-12 relative z-10">
+              <h3 className="sticky top-48 font-sans text-xs tracking-[0.2em] text-white/40 uppercase">
+                Services
+              </h3>
+            </div>
+          )}
 
           {/* Center Timeline Track */}
           <div className="relative w-1 flex-shrink-0 ml-4 md:ml-0">
@@ -319,13 +325,19 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
               return (
                 <div key={index} className="flex flex-col relative w-full">
                   
-                  {/* Horizontal Connector Line */}
-                  <div className="absolute top-[28px] -left-8 md:-left-24 w-8 md:w-24 h-[1px] bg-white/10" />
+                  {/* Horizontal Connector Line dynamically adjusted for Mobile */}
+                  <div 
+                    className="absolute top-[28px] h-[1px] bg-white/10"
+                    style={{
+                      left: isMobile ? '-2rem' : '-6rem',
+                      width: isMobile ? '2rem' : '6rem'
+                    }}
+                  />
                   
                   <motion.div
-                    initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+                    initial={{ opacity: 0, y: isMobile ? 30 : 60, filter: "blur(10px)" }}
                     whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    viewport={{ once: false, margin: "-150px" }}
+                    viewport={{ once: false, margin: isMobile ? "-80px" : "-150px" }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
                   >
                     <div className="flex flex-col gap-4 mb-8">

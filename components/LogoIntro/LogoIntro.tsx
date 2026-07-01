@@ -6,6 +6,7 @@ import styles from "./LogoIntro.module.css";
 import HeroSection from "../HeroSection";
 import AboutSection from "../AboutSection";
 import ContactSection from "../ContactSection";
+import FlowingMenu from "../FlowingMenu/FlowingMenu";
 
 export default function LogoIntro() {
   const [isCurtainUp, setIsCurtainUp] = useState(false);
@@ -50,9 +51,10 @@ export default function LogoIntro() {
     };
   }, [isAtLeft]);
 
-  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     setIsMenuOpen(false);
+    const id = href.replace('#', '');
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: "smooth" });
@@ -118,17 +120,22 @@ export default function LogoIntro() {
         {/* Header spacer inside overlay */}
         <div className={styles.menuHeader} />
 
-        {/* Vertical menu links */}
-        <div className={styles.menuItems}>
-          <a href="#home" onClick={(e) => handleScrollTo(e, 'home')} className={styles.menuLink}>
-            Home
-          </a>
-          <a href="#about" onClick={(e) => handleScrollTo(e, 'about')} className={styles.menuLink}>
-            About
-          </a>
-          <a href="#contact" onClick={(e) => handleScrollTo(e, 'contact')} className={styles.menuLink}>
-            Contact
-          </a>
+        {/* Flowing Menu UI replacing static vertical links */}
+        <div style={{ flex: 1, position: 'relative', width: '100%', minHeight: '300px' }}>
+          <FlowingMenu 
+            items={[
+              { link: '#home', text: 'Home', image: 'https://picsum.photos/600/400?random=1' },
+              { link: '#about', text: 'About', image: 'https://picsum.photos/600/400?random=2' },
+              { link: '#contact', text: 'Contact', image: 'https://picsum.photos/600/400?random=3' }
+            ]}
+            speed={15}
+            textColor="#ffffff"
+            bgColor="transparent"
+            marqueeBgColor="#ffffff"
+            marqueeTextColor="#0a0a0a"
+            borderColor="rgba(255,255,255,0.1)"
+            onItemClick={handleScrollTo}
+          />
         </div>
 
         {/* Footer inside overlay */}
