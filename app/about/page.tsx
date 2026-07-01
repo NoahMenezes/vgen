@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "@/components/LogoIntro/LogoIntro.module.css";
-import AboutSection from "@/components/AboutSection/AboutSection";
+import AboutSection from "@/components/AboutSection";
 
 export default function AboutPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

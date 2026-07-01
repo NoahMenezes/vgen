@@ -1,0 +1,14 @@
+.scroll-reveal {
+  margin: 20px 0;
+}
+
+.scroll-reveal-text {
+  font-size: clamp(24px, 3.5vw, 42px); /* Matches font size from mockup (around 30-40px) */
+  line-height: 1.4;
+  font-weight: 300;
+  font-family: var(--font-serif-headline), Playfair Display, serif;
+}
+
+.word {
+  display: inline-block;
+}

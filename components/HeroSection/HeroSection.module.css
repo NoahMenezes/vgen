@@ -69,7 +69,7 @@
 /* SECTION 2: Horizontal Scroll Track */
 .track {
   position: relative;
-  height: 400vh; /* scroll length for 3 slides + 1 slide of overlap */
+  height: 300vh; /* scroll length for 3 slides */
   width: 100%;
   box-sizing: border-box;
   background-color: var(--background);
@@ -131,10 +131,32 @@
   align-items: flex-start;
   padding: 80px var(--logo-offset);
   box-sizing: border-box;
-  position: relative;
-  z-index: 10;
-  margin-top: -100vh; /* Slide up to overlap the 3rd video track section */
-  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.3); /* Premium depth overlay shadow */
+}
+
+/* SECTION 4: Details Section */
+.detailsSection {
+  background-color: #0a0a0a; /* Black background */
+  color: #ffffff;            /* White text */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px var(--logo-offset);
+  box-sizing: border-box;
+}
+
+/* SECTION 5: Services Section */
+.servicesSection {
+  background-color: #ffffff; /* White background */
+  color: #0a0a0a;            /* Dark text */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 80px var(--logo-offset);
+  box-sizing: border-box;
+}
+
+.paragraphGap {
+  height: 32px;
 }
 
 .overviewGrid {

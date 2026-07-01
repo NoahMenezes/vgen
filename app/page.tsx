@@ -1,4 +1,4 @@
-import LogoIntro from "@/components/LogoIntro/LogoIntro";
+import LogoIntro from "@/components/LogoIntro";
 
 export default function Home() {
   return <LogoIntro />;

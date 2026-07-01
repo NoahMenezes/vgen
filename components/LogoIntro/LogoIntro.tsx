@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./LogoIntro.module.css";
-import HeroSection from "../HeroSection/HeroSection";
+import HeroSection from "../HeroSection";
 
 export default function LogoIntro() {
   const [isCurtainUp, setIsCurtainUp] = useState(false);
