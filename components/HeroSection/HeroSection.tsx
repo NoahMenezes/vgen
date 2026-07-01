@@ -30,17 +30,18 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
   
   const beamColor = useTransform(
     servicesProgress,
-    [0, 0.25, 0.5, 0.75, 1],
-    ["#06b6d4", "#3b82f6", "#8b5cf6", "#ec4899", "#f97316"] // cyan -> blue -> purple -> pink -> orange
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
+    ["#06b6d4", "#ef4444", "#22c55e", "#a855f7", "#ec4899", "#f97316"] // cyan, red, green, purple, pink, orange
   );
   
   const beamShadow = useTransform(
     servicesProgress,
-    [0, 0.25, 0.5, 0.75, 1],
+    [0, 0.2, 0.4, 0.6, 0.8, 1],
     [
       "0 0 20px 4px rgba(6, 182, 212, 0.8)",
-      "0 0 20px 4px rgba(59, 130, 246, 0.8)",
-      "0 0 20px 4px rgba(139, 92, 246, 0.8)",
+      "0 0 20px 4px rgba(239, 68, 68, 0.8)",
+      "0 0 20px 4px rgba(34, 197, 94, 0.8)",
+      "0 0 20px 4px rgba(168, 85, 247, 0.8)",
       "0 0 20px 4px rgba(236, 72, 153, 0.8)",
       "0 0 20px 4px rgba(249, 115, 22, 0.8)",
     ]
@@ -305,30 +306,55 @@ export default function HeroSection({ isVisible = true }: { isVisible?: boolean 
 
           {/* Right Content */}
           <div className="flex-1 flex flex-col gap-[50vh] pb-[20vh] pt-12">
-            {services.map((service, index) => (
-              <div key={index} className="flex flex-col relative w-full">
-                
-                {/* Horizontal Connector Line */}
-                <div className="absolute top-[28px] -left-8 md:-left-24 w-8 md:w-24 h-[1px] bg-white/10" />
-                
-                <motion.div
-                  initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
-                  whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                  viewport={{ once: false, margin: "-150px" }}
-                  transition={{ duration: 0.8, ease: "easeOut" }}
-                >
-                  <div className="flex flex-col gap-4 mb-8">
-                    <span className="font-serif-headline text-3xl italic text-white/80 mb-2 drop-shadow-md">{service.num}</span>
-                    <h4 className="font-sans text-4xl md:text-6xl lg:text-7xl tracking-tighter text-white font-bold leading-[1.1] drop-shadow-[0_0_15px_rgba(255,255,255,0.4)]">
-                      {service.title}
-                    </h4>
-                  </div>
-                  <p className="font-sans text-lg md:text-2xl text-white/95 font-medium max-w-2xl leading-relaxed pl-6 md:pl-10 border-l-2 border-white/30 drop-shadow-sm">
-                    {service.content}
-                  </p>
-                </motion.div>
-              </div>
-            ))}
+            {services.map((service, index) => {
+              const sectionColor = [
+                "#06b6d4", // 0: Cyan
+                "#ef4444", // 1: Red
+                "#22c55e", // 2: Green
+                "#a855f7", // 3: Purple
+                "#ec4899", // 4: Pink
+                "#f97316"  // 5: Orange
+              ][index];
+
+              return (
+                <div key={index} className="flex flex-col relative w-full">
+                  
+                  {/* Horizontal Connector Line */}
+                  <div className="absolute top-[28px] -left-8 md:-left-24 w-8 md:w-24 h-[1px] bg-white/10" />
+                  
+                  <motion.div
+                    initial={{ opacity: 0, y: 50, filter: "blur(10px)" }}
+                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                    viewport={{ once: false, margin: "-150px" }}
+                    transition={{ duration: 0.8, ease: "easeOut" }}
+                  >
+                    <div className="flex flex-col gap-4 mb-8">
+                      <span 
+                        className="font-serif-headline text-3xl italic mb-2 drop-shadow-md"
+                        style={{ color: sectionColor }}
+                      >
+                        {service.num}
+                      </span>
+                      <h4 
+                        className="font-sans text-4xl md:text-6xl lg:text-7xl tracking-tighter font-bold leading-[1.1]"
+                        style={{ 
+                          color: sectionColor, 
+                          textShadow: `0 0 25px ${sectionColor}80` // 80 is 50% opacity in hex
+                        }}
+                      >
+                        {service.title}
+                      </h4>
+                    </div>
+                    <p 
+                      className="font-sans text-lg md:text-2xl text-white/95 font-medium max-w-2xl leading-relaxed pl-6 md:pl-10 border-l-2 drop-shadow-sm"
+                      style={{ borderColor: sectionColor }}
+                    >
+                      {service.content}
+                    </p>
+                  </motion.div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
