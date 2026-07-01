@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./HeroSection.module.css";
@@ -14,13 +13,11 @@ interface HeroSectionProps {
   isVisible: boolean;
 }
 
-export default function HeroSection({ isVisible }: HeroSectionProps) {
-  const router = useRouter();
+export default function HeroSection({ isVisible = true }: { isVisible?: boolean }) {
   const trackRef = useRef<HTMLDivElement>(null);
   const landingSectionRef = useRef<HTMLDivElement>(null);
   const centerBlockRef = useRef<HTMLDivElement>(null);
   const servicesSectionRef = useRef<HTMLDivElement>(null);
-  const ballRef = useRef<HTMLDivElement>(null);
   
   const [progress, setProgress] = useState(0);
   const targetProgressRef = useRef(0);
@@ -100,9 +97,7 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
 
   // Ball transition effect when reaching the bottom of the page
   useEffect(() => {
-    if (!servicesSectionRef.current || !ballRef.current) return;
-
-    router.prefetch("/about");
+    if (!servicesSectionRef.current) return;
 
     // Scroll to the top on fresh mount to guarantee the entry animation plays correctly
     if (window.scrollY > 0) {
@@ -110,41 +105,13 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
     }
 
     const ctx = gsap.context(() => {
-      // Start the ball off-screen at the bottom center and invisible
-      gsap.set(ballRef.current, { y: "60vh", scale: 1, autoAlpha: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: servicesSectionRef.current,
-          start: "bottom-=100vh bottom",
-          end: "bottom-=20px bottom",
-          scrub: true,
-          onLeave: () => {
-            router.push("/about");
-          },
-          onUpdate: (self) => {
-            if (self.progress >= 0.99 && self.direction > 0) {
-              router.push("/about");
-            }
-          },
-        },
-      });
-
-      tl.to(ballRef.current, {
-        autoAlpha: 1,
-        y: "0vh",
-        ease: "power1.inOut",
-      })
-      .to(ballRef.current, {
-        scale: 35,
-        ease: "power2.in",
-      });
+      // Start the ball off-screen      // We no longer trigger a route transition, scrolling is seamless natively
     });
 
     return () => {
       ctx.revert();
     };
-  }, [router]);
+  }, []);
 
   const services = [
     {
@@ -183,7 +150,6 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
     <div className={`${styles.heroWrapper} ${isVisible ? styles.visible : ""}`}>
       {/* Three.js Storm Particles Background */}
       <StormBackground />
-      
       {/* SECTION 1: Minimal Centered Landing */}
       <section 
         ref={landingSectionRef}
@@ -325,8 +291,7 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
           </div>
         </div>
 
-        {/* Transition Ball (Emerges and expands on scroll complete) */}
-        <div ref={ballRef} className={styles.transitionBall} />
+        {/* Removed transitionBall as it's now a single-page site */}
       </section>
 
     </div>

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "./LogoIntro.module.css";
 import HeroSection from "../HeroSection";
+import AboutSection from "../AboutSection";
+import ContactSection from "../ContactSection";
 
 export default function LogoIntro() {
   const [isCurtainUp, setIsCurtainUp] = useState(false);
@@ -48,9 +50,13 @@ export default function LogoIntro() {
     };
   }, [isAtLeft]);
 
-  const handleHomeClick = () => {
+  const handleScrollTo = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    e.preventDefault();
     setIsMenuOpen(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
 
@@ -114,15 +120,15 @@ export default function LogoIntro() {
 
         {/* Vertical menu links */}
         <div className={styles.menuItems}>
-          <span onClick={handleHomeClick} className={styles.menuLink}>
+          <a href="#home" onClick={(e) => handleScrollTo(e, 'home')} className={styles.menuLink}>
             Home
-          </span>
-          <Link href="/about" className={styles.menuLink}>
+          </a>
+          <a href="#about" onClick={(e) => handleScrollTo(e, 'about')} className={styles.menuLink}>
             About
-          </Link>
-          <Link href="/contact" className={styles.menuLink}>
+          </a>
+          <a href="#contact" onClick={(e) => handleScrollTo(e, 'contact')} className={styles.menuLink}>
             Contact
-          </Link>
+          </a>
         </div>
 
         {/* Footer inside overlay */}
@@ -134,8 +140,22 @@ export default function LogoIntro() {
         </div>
       </div>
 
-      {/* Hero Section (Fades and slides in once the logo settles at top-left) */}
-      <HeroSection isVisible={isAtLeft} />
+      {/* Home Section */}
+      <div id="home">
+        <HeroSection isVisible={isAtLeft} />
+      </div>
+
+      {/* Stacked Sections (Rendered only after intro completes) */}
+      {isAtLeft && (
+        <>
+          <div id="about">
+            <AboutSection />
+          </div>
+          <div id="contact">
+            <ContactSection />
+          </div>
+        </>
+      )}
 
     </div>
   );

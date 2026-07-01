@@ -1,200 +1,202 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "./ContactSection.module.css";
+import { motion } from "framer-motion";
+import { Circle } from "lucide-react";
+
+interface InputGroupProps {
+  label: string;
+  placeholder: string;
+  type: string;
+  name: string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  required?: boolean;
+}
+
+function InputGroup({ 
+  label, 
+  placeholder, 
+  type, 
+  name,
+  value,
+  onChange,
+  required = false
+}: InputGroupProps) {
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <label className="text-sm font-medium text-white/80">{label}</label>
+      <input
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        required={required}
+        className="w-full bg-brand-gray border-none rounded-xl h-12 px-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-white/20 transition-all duration-200 text-sm"
+      />
+    </div>
+  );
+}
 
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    company: "",
-    details: "",
+    phone: "",
   });
 
-  const [service, setService] = useState("Web Development");
-  const [budget, setBudget] = useState("$25k - $50k");
-  const [submitted, setSubmitted] = useState(false);
-
-  const services = ["Web Development", "App Development", "AI Integrations", "Other"];
-  const budgets = ["< $25k", "$25k - $50k", "$50k - $100k", "$100k+"];
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate API submission
-    setSubmitted(true);
+    
+    const { name, email, phone } = formData;
+    if (!name || !email || !phone) {
+      alert("Please fill in all the fields.");
+      return;
+    }
+
+    const baseMessage = `Hi Vgen Team! I would like to get in touch to discuss a new project.\n\n• Name: ${name}\n• Email: ${email}\n• Phone: ${phone}`;
+    const encodedMessage = encodeURIComponent(baseMessage);
+    const whatsappUrl = `https://wa.me/919999999999?text=${encodedMessage}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   return (
-    <section className={styles.contactWrapper}>
-      <div className={styles.container}>
+    <section className="relative flex min-h-screen w-full bg-black selection:bg-white/30 p-2 lg:h-screen lg:overflow-hidden lg:p-4 z-20">
+      <div className="flex w-full h-full gap-4 relative">
         
-        {/* Left Column: Heading and Info */}
-        <div className={styles.infoCol}>
-          <h2 className={styles.title}>
-            Let&apos;s build something <span className={styles.serifItalic}>exceptional</span> together.
-          </h2>
-          <p className={styles.subtitle}>
-            Have a project in mind or want to explore how our team can partner with you? Share the details and we&apos;ll get back to you shortly.
-          </p>
+        {/* Left Column: Hero Video & Agency Quote */}
+        <div className="relative w-[52%] hidden lg:flex flex-col items-start justify-end pb-32 px-16 rounded-3xl overflow-hidden shadow-2xl h-full">
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+          >
+            <source 
+              src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260506_081238_406ed0e3-5d83-436e-a512-0bbff7ec5b95.mp4" 
+              type="video/mp4" 
+            />
+          </video>
 
-          <div className={styles.contactDetails}>
-            <div className={styles.detailBlock}>
-              <span className={styles.detailLabel}>General Inquiries</span>
-              <a href="mailto:hello@vgen.co" className={styles.detailValue}>
-                hello@vgen.co
-              </a>
-            </div>
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={{
+              hidden: { opacity: 0 },
+              visible: {
+                opacity: 1,
+                transition: { staggerChildren: 0.15, delayChildren: 0.2 }
+              }
+            }}
+            className="z-10 w-full max-w-md space-y-12"
+          >
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 10 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              className="flex items-center gap-2"
+            >
+              <Circle className="w-5 h-5 text-white fill-white" />
+              <span className="text-xl font-semibold tracking-tight text-white font-sans">Vgen Agency</span>
+            </motion.div>
 
-            <div className={styles.detailBlock}>
-              <span className={styles.detailLabel}>Location</span>
-              <span className={styles.detailValue}>London, United Kingdom</span>
-            </div>
-
-            <div className={styles.detailBlock}>
-              <span className={styles.detailLabel}>Social</span>
-              <div className={styles.socials}>
-                <a href="#" className={styles.socialLink}>Instagram</a>
-                <a href="#" className={styles.socialLink}>LinkedIn</a>
-                <a href="#" className={styles.socialLink}>Twitter</a>
-              </div>
-            </div>
-          </div>
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 10 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              className="space-y-4 border-l border-white/20 pl-6"
+            >
+              <p className="text-2xl font-light italic leading-relaxed text-white/90 font-serif-headline">
+                "We don't just build websites. We craft digital experiences that redefine how brands connect with their audiences."
+              </p>
+              <span className="block text-xs font-semibold tracking-widest uppercase text-white/40 font-sans">
+                — Vgen Team
+              </span>
+            </motion.div>
+          </motion.div>
         </div>
 
-        {/* Right Column: Contact Form */}
-        <div className={styles.formCol}>
-          {submitted ? (
-            <div className={styles.successMessage}>
-              <h3 className={styles.successTitle}>Thank You.</h3>
-              <p className={styles.successText}>
-                Your project inquiry has been received. Our team will review the details and reach out within 24 hours.
+        {/* Right Column: Contact Us Form Container */}
+        <div className="flex-1 flex flex-col items-center justify-between py-12 lg:py-8 px-4 sm:px-12 lg:px-16 xl:px-24 overflow-y-auto lg:overflow-hidden h-full">
+          <div className="hidden lg:block" />
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="w-full max-w-xl space-y-8"
+          >
+            <div>
+              <h2 className="text-3xl font-medium tracking-tight text-white font-sans">Contact Us</h2>
+              <p className="text-white/40 text-sm mt-2 font-sans">
+                Input your details below to instantly start a conversation on WhatsApp.
               </p>
-              <button 
-                onClick={() => setSubmitted(false)} 
-                className={styles.resetButton}
-              >
-                Send another inquiry
-              </button>
             </div>
-          ) : (
-            <form onSubmit={handleSubmit} className={styles.form}>
-              
-              {/* Service Type Selection */}
-              <div className={styles.formSection}>
-                <span className={styles.sectionLabel}>I am looking for:</span>
-                <div className={styles.optionsGrid}>
-                  {services.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => setService(item)}
-                      className={`${styles.optionChip} ${service === item ? styles.activeChip : ""}`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
 
-              {/* Text Fields */}
-              <div className={styles.inputsGrid}>
-                <div className={styles.inputGroup}>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Your Name *"
-                    className={styles.textInput}
-                  />
-                  <span className={styles.inputBar} />
-                </div>
-
-                <div className={styles.inputGroup}>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    placeholder="Email Address *"
-                    className={styles.textInput}
-                  />
-                  <span className={styles.inputBar} />
-                </div>
-
-                <div className={styles.inputGroup}>
-                  <input
-                    type="text"
-                    name="company"
-                    value={formData.company}
-                    onChange={handleInputChange}
-                    placeholder="Company Name"
-                    className={styles.textInput}
-                  />
-                  <span className={styles.inputBar} />
-                </div>
-              </div>
-
-              {/* Project Details */}
-              <div className={styles.inputGroup}>
-                <textarea
-                  name="details"
-                  value={formData.details}
-                  onChange={handleInputChange}
-                  rows={4}
-                  placeholder="Tell us about your project..."
-                  className={styles.textareaInput}
-                />
-                <span className={styles.inputBar} />
-              </div>
-
-              {/* Budget Selection */}
-              <div className={styles.formSection}>
-                <span className={styles.sectionLabel}>Estimated Budget:</span>
-                <div className={styles.optionsGrid}>
-                  {budgets.map((item) => (
-                    <button
-                      key={item}
-                      type="button"
-                      onClick={() => setBudget(item)}
-                      className={`${styles.optionChip} ${budget === item ? styles.activeChip : ""}`}
-                    >
-                      {item}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Submit Button */}
-              <button type="submit" className={styles.submitBtn}>
-                <span>Submit Inquiry</span>
-                <svg 
-                  className={styles.arrowIcon}
-                  width="16" 
-                  height="16" 
-                  viewBox="0 0 16 16" 
-                  fill="none" 
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path 
-                    d="M1 8H15M15 8L8 1M15 8L8 15" 
-                    stroke="currentColor" 
-                    strokeWidth="1.5" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  />
-                </svg>
+            <form onSubmit={handleFormSubmit} className="space-y-5">
+              <InputGroup 
+                label="Full Name" 
+                placeholder="Enter your name" 
+                type="text" 
+                name="name"
+                value={formData.name}
+                onChange={handleInputChange}
+                required 
+              />
+              <InputGroup 
+                label="Email Address" 
+                placeholder="you@domain.com" 
+                type="email" 
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required 
+              />
+              <InputGroup 
+                label="Phone Number" 
+                placeholder="+91 XXXXX XXXXX" 
+                type="tel" 
+                name="phone"
+                value={formData.phone}
+                onChange={handleInputChange}
+                required 
+              />
+              <button 
+                type="submit" 
+                className="w-full h-14 bg-white text-black font-semibold rounded-xl hover:bg-white/90 active:scale-[0.98] transition-all duration-200 mt-6 cursor-pointer font-sans"
+              >
+                Send to WhatsApp
               </button>
-
             </form>
-          )}
+          </motion.div>
+
+          <div className="w-full max-w-xl pt-8 mt-12 border-t border-white/10 flex flex-col gap-3">
+            <span className="text-[10px] uppercase tracking-widest text-white/30 font-medium font-sans">
+              Our Team
+            </span>
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 text-xs text-white/50 font-medium font-sans">
+              <span className="text-white hover:text-white transition-colors duration-150">Noah Menezes</span>
+              <span className="text-white/20">•</span>
+              <span className="hover:text-white transition-colors duration-150">Jared Furtado</span>
+              <span className="text-white/20">•</span>
+              <span className="hover:text-white transition-colors duration-150">Piyush Prajapat</span>
+              <span className="text-white/20">•</span>
+              <span className="hover:text-white transition-colors duration-150">Vibhu Porobo</span>
+              <span className="text-white/20">•</span>
+              <span className="hover:text-white transition-colors duration-150">G Karrtikeya</span>
+            </div>
+          </div>
         </div>
 
       </div>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./AboutSection.module.css";
@@ -9,9 +8,7 @@ import styles from "./AboutSection.module.css";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function AboutSection() {
-  const router = useRouter();
   const pillarsSectionRef = useRef<HTMLDivElement>(null);
-  const ballRef = useRef<HTMLDivElement>(null);
 
   const pillars = [
     {
@@ -31,48 +28,10 @@ export default function AboutSection() {
     }
   ];
 
-  // Ball transition effect when reaching the bottom of the About page
+  // Ball transition removed since this is a single page
   useEffect(() => {
-    if (!pillarsSectionRef.current || !ballRef.current) return;
-
-    router.prefetch("/contact");
-
-    const ctx = gsap.context(() => {
-      // Start the ball off-screen at the bottom center and invisible
-      gsap.set(ballRef.current, { y: "60vh", scale: 1, autoAlpha: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: pillarsSectionRef.current,
-          start: "bottom-=100vh bottom",
-          end: "bottom-=20px bottom",
-          scrub: true,
-          onLeave: () => {
-            router.push("/contact");
-          },
-          onUpdate: (self) => {
-            if (self.progress >= 0.99 && self.direction > 0) {
-              router.push("/contact");
-            }
-          },
-        },
-      });
-
-      tl.to(ballRef.current, {
-        autoAlpha: 1,
-        y: "0vh",
-        ease: "power1.inOut",
-      })
-      .to(ballRef.current, {
-        scale: 35,
-        ease: "power2.in",
-      });
-    });
-
-    return () => {
-      ctx.revert();
-    };
-  }, [router]);
+    // No-op for now, retained for structure
+  }, []);
 
   return (
     <div className={styles.aboutWrapper}>
@@ -131,9 +90,7 @@ export default function AboutSection() {
         </div>
       </section>
 
-      {/* Transition Ball (Emerges and expands on scroll complete) */}
-      <div ref={ballRef} className={styles.transitionBall} />
-
+      {/* Removed transitionBall */}
     </div>
   );
 }

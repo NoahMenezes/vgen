@@ -17,21 +17,21 @@ function hexToVec3(hex: string): THREE.Vector3 {
 }
 
 const CONFIG = {
-  bgColor: "#000000",        // Override to pitch black `#000000` as requested
-  flameColor: "#2b050f",     // Dim burgundy corner flame
-  flameColor2: "#8f203b",    // Dim crimson corner flame
-  flameAmt: 0.25,            // Warm corner flame wash
-  atmoColor: "#8f203b",      // Muted crimson atmospheric motes
-  atmoCount: 200,            // Slightly fewer motes for cleaner screen
-  atmoSize: 18,              // Smaller motes
-  atmoSpeed: 0.5,            // Slower, calmer drift
-  coreColor: "#2b050f",      // Very deep burgundy core
-  midColor: "#8f203b",       // Muted crimson middle
-  rimColor: "#d48837",       // Warm copper/amber rim
-  opacity: 1.2,              // Soft, semi-transparent blend
-  pointSize: 25,             // Fine misty dust particles
-  brightness: 0.9,           // Soft, organic luminance
-  spin: 0.02,                // Slightly slower rotation
+  bgColor: '#1a0418',
+  flameColor: '#ff2d6b',
+  flameColor2: '#ffd36b',
+  flameAmt: 0.2,
+  atmoColor: '#ff7ab0',
+  atmoCount: 300,
+  atmoSize: 24,
+  atmoSpeed: 1.0,
+  coreColor: '#6a0a2a',
+  midColor: '#ff2d6b',
+  rimColor: '#ffd36b',
+  opacity: 2,
+  pointSize: 80,
+  brightness: 1.6,
+  spin: 0.03,
   blowUp: 0,
   repelRadius: 1.4,
   repelStrength: 4,
@@ -102,7 +102,7 @@ export default function StormBackground() {
       const dx = u * factor;
       const dy = v * factor;
       const dz = 1 - 2 * s;
-      const rN = Math.pow(Math.random(), 1.2); // Bias inward to fade out density at the edges naturally
+      const rN = Math.pow(Math.random(), 0.4); // Bias outward (most points near the shell)
       const r = radius * (0.55 + rN * 0.45);
 
       positions[i3] = dx * r;
@@ -203,8 +203,6 @@ export default function StormBackground() {
 
     const mainPoints = new THREE.Points(geo, material);
     mainPoints.layers.enable(LAYERS.ENTIRE_SCENE);
-    mainPoints.layers.enable(LAYERS.BLOOM_SCENE);
-    mainPoints.layers.enable(LAYERS.TORUS_SCENE);
 
     const group = new THREE.Group();
     group.add(mainPoints);
@@ -270,39 +268,14 @@ export default function StormBackground() {
 
     // Composers setup
     const renderScene = new RenderPass(scene, camera);
+    // Custom WebGL Render Targets removed to save massive RAM and VRAM
 
-    // Custom WebGL Render Targets for texture feeding
-    const torusTarget = new THREE.WebGLRenderTarget(width, height, {
-      minFilter: THREE.LinearFilter,
-      magFilter: THREE.LinearFilter,
-      format: THREE.RGBAFormat,
-    });
-    const bloomTarget = new THREE.WebGLRenderTarget(width, height, {
-      minFilter: THREE.LinearFilter,
-      magFilter: THREE.LinearFilter,
-      format: THREE.RGBAFormat,
-    });
-
-    const torusComposer = new EffectComposer(renderer, torusTarget);
-    torusComposer.renderToScreen = false;
-    torusComposer.addPass(renderScene);
-    torusComposer.addPass(new ShaderPass(GammaCorrectionShader));
-    torusComposer.addPass(new UnrealBloomPass(new THREE.Vector2(width, height), 0.22, 0.2, 0));
-    torusComposer.addPass(new ShaderPass(CopyShader));
-
-    const bloomComposer = new EffectComposer(renderer, bloomTarget);
-    bloomComposer.renderToScreen = false;
-    bloomComposer.addPass(renderScene);
-    bloomComposer.addPass(new UnrealBloomPass(new THREE.Vector2(width, height), 0.4, 0.55, 0));
-    bloomComposer.addPass(new ShaderPass(GammaCorrectionShader));
 
     // Final composition pass
     const FinalPass = {
       uniforms: {
         iTime: { value: 0 },
         tDiffuse: { value: null },
-        torusTexture: { value: null as THREE.Texture | null },
-        bloomTexture: { value: null as THREE.Texture | null },
         haloTexture: { value: null as THREE.Texture | null },
         uBg: { value: hexToVec3(CONFIG.bgColor) },
         uFlameA: { value: hexToVec3(CONFIG.flameColor) },
@@ -311,7 +284,7 @@ export default function StormBackground() {
       },
       vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }`,
       fragmentShader: `
-        uniform float iTime; uniform sampler2D tDiffuse; uniform sampler2D bloomTexture; uniform sampler2D torusTexture; uniform sampler2D haloTexture;
+        uniform float iTime; uniform sampler2D tDiffuse; uniform sampler2D haloTexture;
         uniform vec3 uBg; uniform vec3 uFlameA; uniform vec3 uFlameB; uniform float uFlameAmt;
         varying vec2 vUv;
         vec3 warp3d(vec3 pos, float t){ float curv=.8,a=1.9,b=0.7; pos*=2.;
@@ -335,8 +308,6 @@ export default function StormBackground() {
     const finalComposer = new EffectComposer(renderer);
     finalComposer.addPass(renderScene);
     const finalPass = new ShaderPass(FinalPass);
-    finalPass.uniforms.torusTexture.value = torusTarget.texture;
-    finalPass.uniforms.bloomTexture.value = bloomTarget.texture;
     finalComposer.addPass(finalPass);
 
     // Pointer activity tracking
@@ -415,11 +386,6 @@ export default function StormBackground() {
       renderer.setSize(width, height);
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-      torusTarget.setSize(width, height);
-      bloomTarget.setSize(width, height);
-
-      torusComposer.setSize(width, height);
-      bloomComposer.setSize(width, height);
       finalComposer.setSize(width, height);
 
       atmoUniforms.uRes.value.set(width * renderer.getPixelRatio(), height * renderer.getPixelRatio());
@@ -481,11 +447,7 @@ export default function StormBackground() {
       finalPass.uniforms.iTime.value = t;
 
       // Layered postprocessing render step
-      camera.layers.set(LAYERS.TORUS_SCENE);
-      torusComposer.render();
 
-      camera.layers.set(LAYERS.BLOOM_SCENE);
-      bloomComposer.render();
 
       camera.layers.set(LAYERS.ENTIRE_SCENE);
       finalComposer.render();
@@ -505,8 +467,6 @@ export default function StormBackground() {
       material.dispose();
       atmoGeo.dispose();
       atmoMat.dispose();
-      torusTarget.dispose();
-      bloomTarget.dispose();
       renderer.dispose();
     };
   }, []);
