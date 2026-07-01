@@ -3,39 +3,31 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import styles from "@/components/LogoIntro/LogoIntro.module.css";
-import AboutSection from "@/components/AboutSection";
+import ContactSection from "@/components/ContactSection";
 
-export default function AboutPage() {
+export default function ContactPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = "auto";
     document.body.style.overflowX = "hidden";
     document.body.style.overflowY = "auto";
-    
-    // Force scroll bar position to the absolute top of the page
-    window.scrollTo(0, 0);
-    const scrollTimer = setTimeout(() => {
-      window.scrollTo(0, 0);
-    }, 50);
-
-    return () => clearTimeout(scrollTimer);
   }, []);
 
   return (
-    <main className="min-h-screen relative select-none">
+    <main className="min-h-screen relative select-none bg-white">
       
-      {/* Vgen Logo link in top-left (stays static, no entry animation on this subpage) */}
+      {/* Vgen Logo link in top-left (stays static, forced dark color on contact page) */}
       <Link href="/">
         <h1 
           className={`font-serif-headline font-normal uppercase tracking-[0.25em] ${styles.logoTransition} ${styles.logoStage2}`}
-          style={{ fontSize: "var(--logo-size)" }}
+          style={{ fontSize: "var(--logo-size)", color: "#0a0a0a" }}
         >
           Vgen
         </h1>
       </Link>
 
-      {/* Unified Hamburger Menu Button */}
+      {/* Unified Hamburger Menu Button (forced dark color unless menu is open) */}
       <button 
         onClick={() => setIsMenuOpen(!isMenuOpen)}
         className={`${styles.burgerButton} ${isMenuOpen ? styles.open : ""}`}
@@ -46,9 +38,9 @@ export default function AboutPage() {
           transform: "translate3d(0, 0, 0)",
         }}
       >
-        <span className={styles.burgerLine1} />
-        <span className={styles.burgerLine2} />
-        <span className={styles.burgerLine3} />
+        <span className={styles.burgerLine1} style={{ backgroundColor: isMenuOpen ? "#ffffff" : "#0a0a0a" }} />
+        <span className={styles.burgerLine2} style={{ backgroundColor: isMenuOpen ? "#ffffff" : "#0a0a0a" }} />
+        <span className={styles.burgerLine3} style={{ backgroundColor: isMenuOpen ? "#ffffff" : "#0a0a0a" }} />
       </button>
 
       {/* Fullscreen Overlay Menu */}
@@ -65,12 +57,12 @@ export default function AboutPage() {
           <Link href="/" className={styles.menuLink}>
             Home
           </Link>
-          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
+          <Link href="/about" className={styles.menuLink}>
             About
-          </span>
-          <Link href="/contact" className={styles.menuLink}>
-            Contact
           </Link>
+          <span onClick={() => setIsMenuOpen(false)} className={styles.menuLink}>
+            Contact
+          </span>
         </div>
 
         {/* Footer inside overlay */}
@@ -82,8 +74,8 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* About Page Contents */}
-      <AboutSection />
+      {/* Contact Page Contents */}
+      <ContactSection />
 
     </main>
   );

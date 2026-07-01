@@ -55,12 +55,13 @@ export default function LogoIntro() {
 
 
   if (!hasMounted) {
-    return <div className="min-h-screen bg-white" />;
+    return <div className="min-h-screen bg-[#0a0a0a]" />;
   }
 
   return (
     <div 
-      className={`bg-white min-h-screen relative select-none ${isAtLeft ? "overflow-visible" : "overflow-hidden"}`}
+      className={`min-h-screen relative select-none ${isAtLeft ? "overflow-visible" : "overflow-hidden"}`}
+      style={{ backgroundColor: isAtLeft ? "transparent" : "#0a0a0a" }}
     >
       
       {/* Black Curtain Section (in front initially) */}
@@ -118,6 +119,9 @@ export default function LogoIntro() {
           </span>
           <Link href="/about" className={styles.menuLink}>
             About
+          </Link>
+          <Link href="/contact" className={styles.menuLink}>
+            Contact
           </Link>
         </div>
 

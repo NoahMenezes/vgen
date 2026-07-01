@@ -186,3 +186,20 @@
   margin: 0;
   transition: color 0.5s ease;
 }
+
+/* White transition ball for About -> Contact transition */
+.transitionBall {
+  width: 100px;
+  height: 100px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}

@@ -1,19 +1,59 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./HeroSection.module.css";
 import ScrollReveal from "./ScrollReveal";
 import StormBackground from "./StormBackground";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface HeroSectionProps {
   isVisible: boolean;
 }
 
 export default function HeroSection({ isVisible }: HeroSectionProps) {
+  const router = useRouter();
   const trackRef = useRef<HTMLDivElement>(null);
+  const landingSectionRef = useRef<HTMLDivElement>(null);
+  const centerBlockRef = useRef<HTMLDivElement>(null);
+  const servicesSectionRef = useRef<HTMLDivElement>(null);
+  const ballRef = useRef<HTMLDivElement>(null);
+  
   const [progress, setProgress] = useState(0);
   const targetProgressRef = useRef(0);
   const currentProgressRef = useRef(0);
+
+  useEffect(() => {
+    if (!landingSectionRef.current || !centerBlockRef.current) return;
+
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        centerBlockRef.current,
+        {
+          scale: 1,
+          opacity: 1,
+        },
+        {
+          scale: 2.5,
+          opacity: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: landingSectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        }
+      );
+    });
+
+    return () => {
+      ctx.revert();
+    };
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -58,6 +98,54 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
     };
   }, []);
 
+  // Ball transition effect when reaching the bottom of the page
+  useEffect(() => {
+    if (!servicesSectionRef.current || !ballRef.current) return;
+
+    router.prefetch("/about");
+
+    // Scroll to the top on fresh mount to guarantee the entry animation plays correctly
+    if (window.scrollY > 0) {
+      window.scrollTo(0, 0);
+    }
+
+    const ctx = gsap.context(() => {
+      // Start the ball off-screen at the bottom center and invisible
+      gsap.set(ballRef.current, { y: "60vh", scale: 1, autoAlpha: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: servicesSectionRef.current,
+          start: "bottom-=100vh bottom",
+          end: "bottom-=20px bottom",
+          scrub: true,
+          onLeave: () => {
+            router.push("/about");
+          },
+          onUpdate: (self) => {
+            if (self.progress >= 0.99 && self.direction > 0) {
+              router.push("/about");
+            }
+          },
+        },
+      });
+
+      tl.to(ballRef.current, {
+        autoAlpha: 1,
+        y: "0vh",
+        ease: "power1.inOut",
+      })
+      .to(ballRef.current, {
+        scale: 35,
+        ease: "power2.in",
+      });
+    });
+
+    return () => {
+      ctx.revert();
+    };
+  }, [router]);
+
   const services = [
     {
       num: "01",
@@ -97,8 +185,11 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
       <StormBackground />
       
       {/* SECTION 1: Minimal Centered Landing */}
-      <section className={`${styles.section} ${styles.landingSection}`}>
-        <div className={styles.centerBlock}>
+      <section 
+        ref={landingSectionRef}
+        className={`${styles.section} ${styles.landingSection}`}
+      >
+        <div ref={centerBlockRef} className={styles.centerBlock}>
           <h1 className={styles.title}>Vgen</h1>
           <p className={styles.subtitle}>Web · App · AI Agent Services</p>
         </div>
@@ -151,7 +242,7 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
               baseRotation={3}
               blurStrength={4}
             >
-              Born in a digital-first studio, Vgen is a modern production collective built on craft, quality, and considered design, bringing globally sourced, locally optimized digital systems to thoughtfully designed interfaces across the web and beyond.
+              Born in a digital-first studio, Vgen is a modern production collective built on craft, quality, and considered design. We bring globally sourced, locally optimized digital systems to thoughtfully designed interfaces across the web and beyond, creating unforgettable experiences for forward-thinking brands.
             </ScrollReveal>
           </div>
         </div>
@@ -191,7 +282,10 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
       </section>
 
       {/* SECTION 5: Services Section (White background) */}
-      <section className={`${styles.section} ${styles.servicesSection}`}>
+      <section 
+        ref={servicesSectionRef}
+        className={`${styles.section} ${styles.servicesSection}`}
+      >
         <div className={styles.overviewGrid}>
           {/* Left Column Labels */}
           <div className={styles.labelCol}>
@@ -230,6 +324,9 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
             </div>
           </div>
         </div>
+
+        {/* Transition Ball (Emerges and expands on scroll complete) */}
+        <div ref={ballRef} className={styles.transitionBall} />
       </section>
 
     </div>

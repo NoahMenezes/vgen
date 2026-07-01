@@ -1,8 +1,18 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styles from "./AboutSection.module.css";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export default function AboutSection() {
+  const router = useRouter();
+  const pillarsSectionRef = useRef<HTMLDivElement>(null);
+  const ballRef = useRef<HTMLDivElement>(null);
+
   const pillars = [
     {
       num: "01",
@@ -20,6 +30,49 @@ export default function AboutSection() {
       content: "Intelligent workflows and custom agents that automate actions, engage users, and build a smarter future."
     }
   ];
+
+  // Ball transition effect when reaching the bottom of the About page
+  useEffect(() => {
+    if (!pillarsSectionRef.current || !ballRef.current) return;
+
+    router.prefetch("/contact");
+
+    const ctx = gsap.context(() => {
+      // Start the ball off-screen at the bottom center and invisible
+      gsap.set(ballRef.current, { y: "60vh", scale: 1, autoAlpha: 0 });
+
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: pillarsSectionRef.current,
+          start: "bottom-=100vh bottom",
+          end: "bottom-=20px bottom",
+          scrub: true,
+          onLeave: () => {
+            router.push("/contact");
+          },
+          onUpdate: (self) => {
+            if (self.progress >= 0.99 && self.direction > 0) {
+              router.push("/contact");
+            }
+          },
+        },
+      });
+
+      tl.to(ballRef.current, {
+        autoAlpha: 1,
+        y: "0vh",
+        ease: "power1.inOut",
+      })
+      .to(ballRef.current, {
+        scale: 35,
+        ease: "power2.in",
+      });
+    });
+
+    return () => {
+      ctx.revert();
+    };
+  }, [router]);
 
   return (
     <div className={styles.aboutWrapper}>
@@ -45,7 +98,7 @@ export default function AboutSection() {
       </section>
 
       {/* Agency Pillars Section */}
-      <section className={styles.pillarsSection}>
+      <section ref={pillarsSectionRef} className={styles.pillarsSection}>
         <h3 className={styles.pillarsTitle}>Agency Pillars</h3>
         
         <div className={styles.cardsStack}>
@@ -77,6 +130,9 @@ export default function AboutSection() {
           })}
         </div>
       </section>
+
+      {/* Transition Ball (Emerges and expands on scroll complete) */}
+      <div ref={ballRef} className={styles.transitionBall} />
 
     </div>
   );

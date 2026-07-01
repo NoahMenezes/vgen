@@ -18,20 +18,20 @@ function hexToVec3(hex: string): THREE.Vector3 {
 
 const CONFIG = {
   bgColor: "#000000",        // Override to pitch black `#000000` as requested
-  flameColor: "#ff2d6b",     // CONFIG.flameColor
-  flameColor2: "#ffd36b",    // CONFIG.flameColor2
-  flameAmt: 0.2,             // CONFIG.flameAmt
-  atmoColor: "#ff7ab0",      // CONFIG.atmoColor
-  atmoCount: 300,
-  atmoSize: 24,
-  atmoSpeed: 1.0,
-  coreColor: "#6a0a2a",
-  midColor: "#ff2d6b",
-  rimColor: "#ffd36b",
-  opacity: 2,
-  pointSize: 80,
-  brightness: 1.6,
-  spin: 0.03,
+  flameColor: "#2b050f",     // Dim burgundy corner flame
+  flameColor2: "#8f203b",    // Dim crimson corner flame
+  flameAmt: 0.25,            // Warm corner flame wash
+  atmoColor: "#8f203b",      // Muted crimson atmospheric motes
+  atmoCount: 200,            // Slightly fewer motes for cleaner screen
+  atmoSize: 18,              // Smaller motes
+  atmoSpeed: 0.5,            // Slower, calmer drift
+  coreColor: "#2b050f",      // Very deep burgundy core
+  midColor: "#8f203b",       // Muted crimson middle
+  rimColor: "#d48837",       // Warm copper/amber rim
+  opacity: 1.2,              // Soft, semi-transparent blend
+  pointSize: 25,             // Fine misty dust particles
+  brightness: 0.9,           // Soft, organic luminance
+  spin: 0.02,                // Slightly slower rotation
   blowUp: 0,
   repelRadius: 1.4,
   repelStrength: 4,
@@ -102,7 +102,7 @@ export default function StormBackground() {
       const dx = u * factor;
       const dy = v * factor;
       const dz = 1 - 2 * s;
-      const rN = Math.pow(Math.random(), 0.4); // Bias outward
+      const rN = Math.pow(Math.random(), 1.2); // Bias inward to fade out density at the edges naturally
       const r = radius * (0.55 + rN * 0.45);
 
       positions[i3] = dx * r;
@@ -301,8 +301,8 @@ export default function StormBackground() {
       uniforms: {
         iTime: { value: 0 },
         tDiffuse: { value: null },
-        torusTexture: { value: torusTarget.texture },
-        bloomTexture: { value: bloomTarget.texture },
+        torusTexture: { value: null as THREE.Texture | null },
+        bloomTexture: { value: null as THREE.Texture | null },
         haloTexture: { value: null as THREE.Texture | null },
         uBg: { value: hexToVec3(CONFIG.bgColor) },
         uFlameA: { value: hexToVec3(CONFIG.flameColor) },
@@ -327,7 +327,7 @@ export default function StormBackground() {
           float md = smoothstep(-0.7, 1., -uv.y*uv.x); flame *= md*md;
           vec3 bg = uBg * (1.0 - 0.4 * length(uv));
           vec3 halo = texture2D(haloTexture, vUv).xyz;
-          gl_FragColor = vec4(bg + flame*uFlameAmt + texture2D(bloomTexture, vUv).xyz + texture2D(torusTexture, vUv).xyz + texture2D(tDiffuse, vUv).xyz + halo, 1.);
+          gl_FragColor = vec4(bg + flame*uFlameAmt + texture2D(tDiffuse, vUv).xyz + halo, 1.);
         }
       `,
     };
@@ -335,6 +335,8 @@ export default function StormBackground() {
     const finalComposer = new EffectComposer(renderer);
     finalComposer.addPass(renderScene);
     const finalPass = new ShaderPass(FinalPass);
+    finalPass.uniforms.torusTexture.value = torusTarget.texture;
+    finalPass.uniforms.bloomTexture.value = bloomTarget.texture;
     finalComposer.addPass(finalPass);
 
     // Pointer activity tracking
@@ -389,9 +391,14 @@ export default function StormBackground() {
     let scrollSmooth = 0;
     let scrollCurrent = 0;
 
+    let s1Target = 0;
+    let s1Smooth = 0;
+    let s1Current = 0;
+
     const updateScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       scrollTarget = max > 0 ? Math.max(0, Math.min(1, window.scrollY / max)) : 0;
+      s1Target = Math.max(0, Math.min(1, window.scrollY / window.innerHeight));
     };
 
     window.addEventListener("scroll", updateScroll, { passive: true });
@@ -436,6 +443,9 @@ export default function StormBackground() {
       // Scroll and mouse smoothing
       scrollSmooth = Lerp(scrollSmooth, scrollTarget, 0.10);
       scrollCurrent = Lerp(scrollCurrent, scrollSmooth, 0.06);
+      s1Smooth = Lerp(s1Smooth, s1Target, 0.10);
+      s1Current = Lerp(s1Current, s1Smooth, 0.06);
+
       mouseSmooth.x = Lerp(mouseSmooth.x, POINTER.ndc.x, 0.06);
       mouseSmooth.y = Lerp(mouseSmooth.y, POINTER.ndc.y, 0.06);
 
@@ -456,7 +466,9 @@ export default function StormBackground() {
       group.scale.setScalar(1 + scrollCurrent * CONFIG.scrollGrow);
       const elapsed = performance.now() - appearStart;
       const fade = Math.max(0, Math.min(1, (elapsed - 300) / 1400));
-      uniforms.uOpacity.value = fade * CONFIG.opacity;
+      const explosionFade = Math.max(0, 1.0 - s1Current * 1.5);
+      uniforms.uOpacity.value = fade * CONFIG.opacity * explosionFade;
+      uniforms.uBlowUp.value = s1Current * 2.5; // Blows up as Section 1 scrolls
       uniforms.uCursor.value.copy(POINTER.world);
       uniforms.uActivity.value = POINTER.activity;
 
