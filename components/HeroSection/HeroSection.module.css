@@ -25,20 +25,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #ffffff;
+  background-color: var(--background);
+  transition: background-color 0.5s ease;
 }
 
 /* Center Text Container */
 .centerBlock {
   position: relative;
   z-index: 2;
-  background-color: #ffffff;
+  background-color: var(--background);
   padding: 32px 48px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
+  transition: background-color 0.5s ease;
 }
 
 .title {
@@ -47,9 +49,10 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.3em;
-  color: #0a0a0a;
+  color: var(--foreground);
   margin: 0;
   padding-left: 0.3em;
+  transition: color 0.5s ease;
 }
 
 .subtitle {
@@ -66,10 +69,10 @@
 /* SECTION 2: Horizontal Scroll Track */
 .track {
   position: relative;
-  height: 300vh; /* scroll length for 3 slides */
+  height: 400vh; /* scroll length for 3 slides + 1 slide of overlap */
   width: 100%;
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: var(--background);
 }
 
 /* Invisible Vertical snap targets inside track */
@@ -121,13 +124,17 @@
 
 /* SECTION 3: Overview Section */
 .overviewSection {
-  background-color: #ffffff;
-  color: #0a0a0a;
+  background-color: #ffffff; /* White background */
+  color: #0a0a0a;            /* Dark text */
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding: 80px var(--logo-offset);
   box-sizing: border-box;
+  position: relative;
+  z-index: 10;
+  margin-top: -100vh; /* Slide up to overlap the 3rd video track section */
+  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.3); /* Premium depth overlay shadow */
 }
 
 .overviewGrid {
@@ -150,6 +157,9 @@
   display: flex;
   flex-direction: column;
   gap: 160px;
+  position: sticky;
+  top: 120px;
+  align-self: start;
 }
 
 .overviewLabel {
@@ -187,36 +197,104 @@
   margin: 0;
 }
 
-/* Services Grid cells */
-.servicesGrid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
+/* Services Stacking Cards */
+.cardsStack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 80px; /* Spacing between sticky card offsets */
   width: 100%;
   margin-top: 48px;
+  padding-bottom: 80px;
 }
 
-@media (min-width: 640px) {
-  .servicesGrid {
-    grid-template-columns: 1fr 1fr;
+.serviceCard {
+  position: sticky;
+  border-radius: 24px;
+  padding: clamp(24px, 4vw, 48px);
+  box-sizing: border-box;
+  color: #ffffff; /* Dark cards have white text */
+  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: clamp(200px, 30vh, 260px);
+  transition: transform 0.3s ease;
+  top: calc(80px + var(--index) * 16px);
+}
+
+.serviceCard:hover {
+  transform: translateY(-4px);
+}
+
+@media (min-width: 768px) {
+  .serviceCard {
+    top: calc(120px + var(--index) * 40px);
   }
 }
 
-.serviceCell {
-  background-color: #0c0c0e;
+.card1 {
+  background-color: #18181b; /* zinc-900 */
   border: 1px solid #27272a;
-  border-radius: 12px;
-  padding: 24px;
-  font-family: var(--font-sans);
-  font-size: clamp(12px, 1.3vw, 14px);
-  font-weight: 300;
-  color: #e4e4e7;
-  display: flex;
-  align-items: center;
-  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
 }
 
-.serviceCell:hover {
-  border-color: #52525b;
-  color: #ffffff;
+.card2 {
+  background-color: #121214;
+  border: 1px solid #1f1f23;
+}
+
+.card3 {
+  background-color: #0c0c0e;
+  border: 1px solid #17171a;
+}
+
+.card4 {
+  background-color: #08080a;
+  border: 1px solid #121214;
+}
+
+.card5 {
+  background-color: #040405;
+  border: 1px solid #0b0b0d;
+}
+
+.card6 {
+  background-color: #000000;
+  border: 1px solid #060607;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 16px;
+}
+
+.cardTitle {
+  font-family: var(--font-serif-headline);
+  font-size: clamp(18px, 2.5vw, 32px);
+  font-weight: 300;
+  margin: 0;
+}
+
+.cardNum {
+  font-family: var(--font-sans);
+  font-size: clamp(12px, 1.2vw, 14px);
+  font-weight: 300;
+  color: #71717a;
+}
+
+.cardBody {
+  margin-top: 24px;
+}
+
+.cardText {
+  font-family: var(--font-sans);
+  font-size: clamp(14px, 1.5vw, 16px);
+  font-weight: 300;
+  line-height: 1.6;
+  color: #a1a1aa;
+  max-width: 680px;
+  margin: 0;
 }

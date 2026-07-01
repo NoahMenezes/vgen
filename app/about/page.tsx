@@ -15,7 +15,7 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <main className="bg-white min-h-screen relative select-none">
+    <main className="min-h-screen relative select-none">
       
       {/* Vgen Logo link in top-left (stays static, no entry animation on this subpage) */}
       <Link href="/">

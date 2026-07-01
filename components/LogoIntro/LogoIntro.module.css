@@ -88,13 +88,13 @@
   position: fixed;
   inset: 0;
   z-index: 50;
-  background-color: #ffffff; /* White background */
+  background-color: var(--background); /* White/Black background */
   padding: var(--logo-offset);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   box-sizing: border-box;
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.5s ease;
 }
 
 .menuHeader {
@@ -110,7 +110,8 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.25em;
-  color: #0a0a0a;
+  color: var(--foreground);
+  transition: color 0.5s ease;
 }
 
 .closeButton {
@@ -119,7 +120,7 @@
   font-weight: 300;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #0a0a0a;
+  color: var(--foreground);
   background: none;
   border: none;
   cursor: pointer;
@@ -146,7 +147,7 @@
   font-size: clamp(32px, 5vw, 64px);
   font-weight: 300;
   text-transform: capitalize;
-  color: #0a0a0a;
+  color: var(--foreground);
   cursor: pointer;
   width: fit-content;
   transition: transform 0.4s ease, color 0.4s ease;
@@ -179,7 +180,7 @@
   font-family: var(--font-sans);
   font-size: clamp(14px, 1.5vw, 18px);
   font-weight: 300;
-  color: #0a0a0a;
+  color: var(--foreground);
   text-decoration: none;
   width: fit-content;
   transition: color 0.3s ease;
@@ -187,4 +188,29 @@
 
 .supportEmail:hover {
   color: #71717a;
+}
+
+/* Custom Theme Toggle Button */
+.themeToggle {
+  position: fixed;
+  z-index: 60;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  mix-blend-mode: difference;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1s cubic-bezier(0.16, 1, 0.3, 1),
+              scale 0.2s ease;
+}
+
+.themeToggle:hover {
+  transform: scale(1.1);
+}
+
+.themeToggle:active {
+  transform: scale(0.9);
 }

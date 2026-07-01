@@ -7,10 +7,36 @@ html {
 }
 
 :root {
-  --background: #ffffff;
-  --foreground: #0a0a0a;
+  --background: #0a0a0a;
+  --foreground: #ffffff;
   --logo-offset: clamp(20px, 4vw, 40px);
   --logo-size: clamp(24px, 2.5vw, 30px);
+
+  /* Muted colors */
+  --muted-foreground: #a1a1aa;
+
+  /* Card Colors (Light cards on dark bg for About Page) */
+  --card-bg-1: #f4f4f5;
+  --card-bg-2: #e4e4e7;
+  --card-bg-3: #d4d4d8;
+  --card-bg-4: #c0c0c4;
+  --card-bg-5: #b0b0b4;
+  --card-bg-6: #9fa0a4;
+
+  --card-border-1: #e4e4e7;
+  --card-border-2: #d4d4d8;
+  --card-border-3: #c8c8cc;
+  --card-border-4: #b8b8bc;
+  --card-border-5: #a8a8ac;
+  --card-border-6: #98989c;
+
+  --card-text: #0a0a0a;
+  --card-muted-text: #52525b;
+
+  /* Team Placeholder */
+  --team-bg: #f4f4f5;
+  --team-border: #e4e4e7;
+  --team-text: #71717a;
 }
 
 @theme {
@@ -22,8 +48,8 @@ html {
 }
 
 body {
-  background: #ffffff;
-  color: #0a0a0a;
+  background: var(--background);
+  color: var(--foreground);
   font-family: var(--font-geist-sans), Arial, sans-serif;
   overflow: hidden;
 }

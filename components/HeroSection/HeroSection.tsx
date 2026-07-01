@@ -21,11 +21,9 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
       const rect = trackRef.current.getBoundingClientRect();
       const viewHeight = window.innerHeight;
       
-      const totalScrollable = rect.height - viewHeight;
-      if (totalScrollable <= 0) return;
-      
       const currentScroll = -rect.top;
-      const pct = Math.min(Math.max(currentScroll / totalScrollable, 0), 1);
+      const slideScrollable = viewHeight * 2; // Reach 1.0 (Slide 3) at 200vh of scrolling
+      const pct = Math.min(Math.max(currentScroll / slideScrollable, 0), 1);
       targetProgressRef.current = pct;
     };
 
@@ -57,12 +55,36 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
   }, []);
 
   const services = [
-    "Bespoke storefront design + development",
-    "UX / UI improvements",
-    "Enhanced flexibility for content creation",
-    "AI agent integrations & optimizations",
-    "Conversion rate optimization",
-    "Streamlined cloud architecture"
+    {
+      num: "01",
+      title: "Bespoke storefront design + development",
+      content: "Tailored digital commerce solutions built for high-performance brands, ensuring pixel-perfect execution, rapid loading times, and custom-designed paths to purchase."
+    },
+    {
+      num: "02",
+      title: "UX / UI improvements",
+      content: "Refining user flows, visual hierarchies, and interactive elements to create frictionless, intuitive, and delightful customer journeys."
+    },
+    {
+      num: "03",
+      title: "Enhanced flexibility for content creation",
+      content: "Empowering teams with headless CMS integrations and customizable component libraries to build and publish content without development bottlenecks."
+    },
+    {
+      num: "04",
+      title: "AI agent integrations & optimizations",
+      content: "Deploying intelligent systems, LLMs, and custom automation workflows to enhance customer support, recommendation engines, and internal operations."
+    },
+    {
+      num: "05",
+      title: "Conversion rate optimization",
+      content: "Conducting data-driven UX testing, checkout path refinement, and performance tuning to turn visitors into loyal customers."
+    },
+    {
+      num: "06",
+      title: "Streamlined cloud architecture",
+      content: "Designing scalable, secure, and cost-effective hosting setups utilizing modern serverless/edge computing and CDN caching."
+    }
   ];
 
   return (
@@ -78,10 +100,11 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
 
       {/* SECTION 2: Horizontal Video / Media Track */}
       <div ref={trackRef} className={styles.track}>
-        {/* Invisible Vertical Snap Points (ensures browser snaps to each video state) */}
+        {/* Invisible Vertical Snap Points */}
         <div className={styles.snapPoint} style={{ position: "absolute", top: 0 }} />
         <div className={styles.snapPoint} style={{ position: "absolute", top: "100vh" }} />
         <div className={styles.snapPoint} style={{ position: "absolute", top: "200vh" }} />
+        <div className={styles.snapPoint} style={{ position: "absolute", top: "300vh" }} />
         
         {/* Sticky viewport content */}
         <div className={styles.sticky}>
@@ -134,13 +157,33 @@ export default function HeroSection({ isVisible }: HeroSectionProps) {
             {/* Mobile-only Services label */}
             <h3 className={`${styles.overviewLabel} md:hidden mt-8`}>Services</h3>
 
-            {/* Services Grid Cells */}
-            <div className={styles.servicesGrid}>
-              {services.map((service, index) => (
-                <div key={index} className={styles.serviceCell}>
-                  {service}
-                </div>
-              ))}
+            {/* Services Stacking Cards */}
+            <div className={styles.cardsStack}>
+              {services.map((service, index) => {
+                const cardClass = 
+                  index === 0 ? styles.card1 :
+                  index === 1 ? styles.card2 :
+                  index === 2 ? styles.card3 :
+                  index === 3 ? styles.card4 :
+                  index === 4 ? styles.card5 :
+                  styles.card6;
+
+                return (
+                  <div
+                    key={index}
+                    className={`${styles.serviceCard} ${cardClass}`}
+                    style={{ "--index": index } as React.CSSProperties}
+                  >
+                    <div className={styles.cardHeader}>
+                      <h4 className={styles.cardTitle}>{service.title}</h4>
+                      <span className={styles.cardNum}>{service.num}</span>
+                    </div>
+                    <div className={styles.cardBody}>
+                      <p className={styles.cardText}>{service.content}</p>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
